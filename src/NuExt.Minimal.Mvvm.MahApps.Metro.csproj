@@ -1,0 +1,43 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net8.0-windows;net6.0-windows;net462</TargetFrameworks>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <PackageTags>nuext;minimal;mvvm;wpf;xaml;ui;metro;modern;async</PackageTags>
+    <Description>Extensions for the MahApps.Metro toolkit using the Minimal MVVM Framework for streamlined Metro-style WPF app development.
+
+Commonly Used Types:
+Minimal.Mvvm.Windows.DialogCoordinatorService
+Minimal.Mvvm.Windows.MetroDialogService
+Minimal.Mvvm.Windows.MetroTabbedDocumentService
+MahApps.Metro.Controls.Dialogs.MetroDialog</Description>
+    <Version>0.1.0-pre</Version>
+    <RootNamespace>Minimal.Mvvm.Windows</RootNamespace>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageIcon>logo128.png</PackageIcon>
+    <PackageProjectUrl>https://github.com/IvanGit/NuExt.Minimal.Mvvm.MahApps.Metro</PackageProjectUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MahApps.Metro" Version="3.0.0-alpha0513" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(UseNuExtPackages)' == 'true'">
+    <PackageReference Include="NuExt.Minimal.Mvvm.Windows" Version="0.1.0" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(UseNuExtPackages)' == 'false'">
+    <ProjectReference Include="..\..\NuExt.Minimal.Mvvm.Windows\src\NuExt.Minimal.Mvvm.Windows.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\logo128.png" Pack="true" PackagePath="\" />
+    <None Include=".\..\README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+</Project>

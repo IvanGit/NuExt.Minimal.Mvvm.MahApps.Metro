@@ -1,0 +1,52 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+                    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                    xmlns:models="clr-namespace:MetroWpfApp.Models"
+                    xmlns:selectors="clr-namespace:MetroWpfApp.Selectors"
+                    mc:Ignorable="d" >
+
+    <HierarchicalDataTemplate x:Key="MovieGroupDataTemplate" DataType="{x:Type models:MovieGroupModel}"
+                              ItemsSource="{Binding Items}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <iconPacks:PackIconMaterial Grid.Column="0">
+                <iconPacks:PackIconMaterial.Style>
+                    <Style TargetType="iconPacks:PackIconMaterial">
+                        <Setter Property="Foreground" Value="{DynamicResource MahApps.Brushes.AccentBase}"/>
+                        <Setter Property="Kind" Value="{x:Static iconPacks:PackIconMaterialKind.Folder}"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=TreeViewItem}, Path=IsExpanded}" Value="True">
+                                <Setter Property="Kind" Value="{x:Static iconPacks:PackIconMaterialKind.FolderOpen}"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </iconPacks:PackIconMaterial.Style>
+            </iconPacks:PackIconMaterial>
+            <TextBlock Text="{Binding Name}" Grid.Column="1" FontWeight="Bold" Foreground="{DynamicResource MahApps.Brushes.AccentBase}" Margin="5,0"/>
+        </Grid>
+    </HierarchicalDataTemplate>
+
+    <DataTemplate x:Key="MovieDataTemplate" DataType="{x:Type models:MovieModel}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*" SharedSizeGroup="A"/>
+                <ColumnDefinition Width="*" SharedSizeGroup="B"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Text="{Binding Name}" Grid.Column="0" Margin="5,0"/>
+            <TextBlock Text="{Binding ReleaseDate, StringFormat='{}{0:yyyy-MM-dd}'}" Grid.Column="1" Margin="5,0"/>
+            <TextBlock Text="{Binding Director.Name, FallbackValue={x:Null}}" Grid.Column="2" Margin="5,0"/>
+        </Grid>
+    </DataTemplate>
+
+    <selectors:MovieItemTemplateSelector x:Key="MovieItemTemplateSelector"
+                                         GroupDataTemplate="{StaticResource MovieGroupDataTemplate}"
+                                         ItemDataTemplate="{StaticResource MovieDataTemplate}"/>
+
+</ResourceDictionary>

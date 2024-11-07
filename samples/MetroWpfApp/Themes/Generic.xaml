@@ -1,0 +1,14 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:minimal="http://schemas.minimalmvvm.com/winfx/xaml/mvvm">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Themes/Light.Blue.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/NuExt.Minimal.Mvvm.MahApps.Metro;component/Themes/Generic.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Styles/Styles.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
+    <minimal:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+    <minimal:ItemsControlMouseEventArgsConverter x:Key="ItemsControlMouseEventArgsConverter" />
+</ResourceDictionary>

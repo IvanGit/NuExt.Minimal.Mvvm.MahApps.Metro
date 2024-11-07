@@ -1,0 +1,25 @@
+{
+  "NLog": {
+    "autoReload": true,
+    "keepVariablesOnReload": true,
+    "throwConfigExceptions": true,
+    "internalLogLevel": "Info",
+    "internalLogFile": "${basedir}/internal-nlog.txt",
+    "variables": {
+      "basedir": "${basedir}"
+    },
+    "targets": {
+      "async": true,
+      "file": {
+        "type": "File",
+        "fileName": "${var:basedir}/logfile-${shortdate}.log"
+      }
+    },
+    "rules": [
+      {
+        "logger": "*",
+        "writeTo": "file"
+      }
+    ]
+  }
+}

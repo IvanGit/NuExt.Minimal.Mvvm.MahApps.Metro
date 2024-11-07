@@ -1,0 +1,137 @@
+[
+  {
+    "Kind": "Group",
+    "Name": "Drama",
+    "Items": [
+      {
+        "Kind": "Group",
+        "Name": "The Godfather Trilogy",
+        "Items": [
+          {
+            "Kind": "Movie",
+            "Name": "The Godfather",
+            "Directors": [ "Francis Ford Coppola" ],
+            "Writers": [ "Mario Puzo", "Francis Ford Coppola" ],
+            "ReleaseDate": "1972.03.24",
+            "Description": "The aging patriarch of an organized crime dynasty transfers control of his clandestine empire to his reluctant son.",
+            "Storyline": "The Godfather \"Don\" Vito Corleone is the head of the Corleone mafia family in New York. He is at the event of his daughter's wedding. Michael, Vito's youngest son and a decorated WWII Marine is also present at the wedding. Michael seems to be uninterested in being a part of the family business. Vito is a powerful man, and is kind to all those who give him respect but is ruthless against those who do not. But when a powerful and treacherous rival wants to sell drugs and needs the Don's influence for the same, Vito refuses to do it. What follows is a clash between Vito's fading old values and the new ways which may cause Michael to do the thing he was most reluctant in doing and wage a mob war against all the other mafia families which could tear the Corleone family apart."
+          },
+          {
+            "Kind": "Movie",
+            "Name": "The Godfather Part II",
+            "Directors": [ "Francis Ford Coppola" ],
+            "Writers": [ "Francis Ford Coppola", "Mario Puzo" ],
+            "ReleaseDate": "1974.12.20",
+            "Description": "The early life and career of Vito Corleone in 1920s New York City is portrayed, while his son, Michael, expands and tightens his grip on the family crime syndicate.",
+            "Storyline": "The continuing saga of the Corleone crime family tells the story of a young Vito Corleone growing up in Sicily and in 1910s New York; and follows Michael Corleone in the 1950s as he attempts to expand the family business into Las Vegas, Hollywood and Cuba."
+          },
+          {
+            "Kind": "Movie",
+            "Name": "The Godfather Part III",
+            "Directors": [ "Francis Ford Coppola" ],
+            "Writers": [ "Mario Puzo", "Francis Ford Coppola" ],
+            "ReleaseDate": "1990.12.25",
+            "Description": "Follows Michael Corleone, now in his 60s, as he seeks to free his family from crime and find a suitable successor to his empire.",
+            "Storyline": "In the final installment of the Godfather Trilogy, an aging Don Michael Corleone seeks to legitimize his crime family's interests and remove himself from the violent underworld but is kept back by the ambitions of the young. While he attempts to link the Corleone's finances with the Vatican, Michael must deal with the machinations of a hungrier gangster seeking to upset the existing Mafioso order and a young protege's love affair with his daughter."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "Kind": "Group",
+    "Name": "Fantasy",
+    "Items": [
+      {
+        "Kind": "Group",
+        "Name": "The Lord of the Rings Trilogy",
+        "Items": [
+          {
+            "Kind": "Movie",
+            "Name": "The Lord of the Rings: The Fellowship of the Ring",
+            "Directors": [ "Peter Jackson" ],
+            "Writers": [ "J.R.R. Tolkien", "Fran Walsh", "Philippa Boyens" ],
+            "ReleaseDate": "2001.12.19",
+            "Description": "A meek Hobbit from the Shire and eight companions set out on a journey to destroy the powerful One Ring and save Middle-earth from the Dark Lord Sauron.",
+            "Storyline": "An ancient Ring thought lost for centuries has been found, and through a strange twist of fate has been given to a small Hobbit named Frodo. When Gandalf discovers the Ring is in fact the One Ring of the Dark Lord Sauron, Frodo must make an epic quest to the Cracks of Doom in order to destroy it. However, he does not go alone. He is joined by Gandalf, Legolas the elf, Gimli the Dwarf, Aragorn, Boromir, and his three Hobbit friends Merry, Pippin, and Samwise. Through mountains, snow, darkness, forests, rivers and plains, facing evil and danger at every corner the Fellowship of the Ring must go. Their quest to destroy the One Ring is the only hope for the end of the Dark Lords reign."
+          },
+          {
+            "Kind": "Movie",
+            "Name": "The Lord of the Rings: The Two Towers",
+            "Directors": [ "Peter Jackson" ],
+            "Writers": [ "J.R.R. Tolkien", "Fran Walsh", "Philippa Boyens" ],
+            "ReleaseDate": "2002.12.18",
+            "Description": "While Frodo and Sam edge closer to Mordor with the help of the shifty Gollum, the divided fellowship makes a stand against Sauron's new ally, Saruman, and his hordes of Isengard.",
+            "Storyline": "The continuing quest of Frodo and the Fellowship to destroy the One Ring. Frodo and Sam discover they are being followed by the mysterious Gollum. Aragorn, the Elf archer Legolas, and Gimli the Dwarf encounter the besieged Rohan kingdom, whose once great King Theoden has fallen under Saruman's deadly spell."
+          },
+          {
+            "Kind": "Movie",
+            "Name": "The Lord of the Rings: The Return of the King",
+            "Directors": [ "Peter Jackson" ],
+            "Writers": [ "J.R.R. Tolkien", "Fran Walsh", "Philippa Boyens" ],
+            "ReleaseDate": "2003.12.17",
+            "Description": "Gandalf and Aragorn lead the World of Men against Sauron's army to draw his gaze from Frodo and Sam as they approach Mount Doom with the One Ring.",
+            "Storyline": "The final confrontation between the forces of good and evil fighting for control of the future of Middle-earth. Frodo and Sam reach Mordor in their quest to destroy the One Ring, while Aragorn leads the forces of good against Sauron's evil army at the stone city of Minas Tirith."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "Kind": "Group",
+    "Name": "Science fiction",
+    "Items": [
+      {
+        "Kind": "Movie",
+        "Name": "2001: A Space Odyssey",
+        "Directors": [ "Stanley Kubrick" ],
+        "Writers": [ "Stanley Kubrick", "Arthur C. Clarke" ],
+        "ReleaseDate": "1968.04.03",
+        "Description": "After uncovering a mysterious artifact buried beneath the Lunar surface, a spacecraft is sent to Jupiter to find its origins: a spacecraft manned by two men and the supercomputer HAL 9000.",
+        "Storyline": "\"2001\" is a story of evolution. Sometime in the distant past, someone or something nudged evolution by placing a monolith on Earth (presumably elsewhere throughout the universe as well). Evolution then enabled humankind to reach the moon's surface, where yet another monolith is found, one that signals the monolith placers that humankind has evolved that far. Now mankind, assisted by artificial intelligence (such as HAL), must dare to encounter the monolith placers. If successful, the next step in evolution--whatever it is--will be achieved."
+      },
+      {
+        "Kind": "Movie",
+        "Name": "Interstellar",
+        "Directors": [ "Christopher Nolan" ],
+        "Writers": [ "Jonathan Nolan", "Christopher Nolan" ],
+        "ReleaseDate": "2014.11.05",
+        "Description": "When Earth becomes uninhabitable in the future, a farmer and ex-NASA pilot, Joseph Cooper, is tasked to pilot a spacecraft, along with a team of researchers, to find a new planet for humans.",
+        "Storyline": "In the near future around the American Midwest, Cooper, an ex-science engineer and pilot, is tied to his farming land with his daughter Murph and son Tom. As devastating sandstorms ravage Earth's crops, the people of Earth realize their life here is coming to an end as food begins to run out. Eventually stumbling upon a N.A.S.A. base 6 hours from Cooper's home, he is asked to go on a daring mission with a few other scientists into a wormhole because of Cooper's scientific intellect and ability to pilot aircraft unlike the other crew members. In order to find a new home while Earth decays, Cooper must decide to either stay, or risk never seeing his children again in order to save the human race by finding another habitable planet."
+      },
+      {
+        "Kind": "Group",
+        "Name": "Star Wars Trilogy",
+        "Items": [
+          {
+            "Kind": "Movie",
+            "Name": "Star Wars: Episode IV - A New Hope",
+            "Directors": [ "George Lucas" ],
+            "Writers": [ "George Lucas" ],
+            "ReleaseDate": "1977.05.25",
+            "Description": "Luke Skywalker joins forces with a Jedi Knight, a cocky pilot, a Wookiee and two droids to save the galaxy from the Empire's world-destroying battle station, while also attempting to rescue Princess Leia from the mysterious Darth Vader.",
+            "Storyline": "The Imperial Forces under orders from cruel Darth Vader (David Prowse) -- hold Princess Leia (Carrie Fisher) hostage, in their efforts to quell the rebellion against the Galactic Empire. Luke Skywalker (Mark Hamill) and Han Solo (Harrison Ford), captain of the Millennium Falcon, work together with the companionable droid duo R2-D2 (Kenny Baker) and C-3PO (Anthony Daniels) to rescue the beautiful princess, help the Rebel Alliance, and restore freedom and justice to the Galaxy."
+          },
+          {
+            "Kind": "Movie",
+            "Name": "Star Wars: Episode V - The Empire Strikes Back",
+            "Directors": [ "Irvin Kershner" ],
+            "Writers": [ "Leigh Brackett", "Lawrence Kasdan", "George Lucas" ],
+            "ReleaseDate": "1980.05.21",
+            "Description": "After the Empire overpowers the Rebel Alliance, Luke Skywalker begins his Jedi training with Yoda. At the same time, Darth Vader and bounty hunter Boba Fett pursue his friends across the galaxy.",
+            "Storyline": "The legendary saga continues as the Rebel Alliance faces increasing challenges from the mighty Galactic Empire. Luke Skywalker, Han Solo, and Princess Leia Organa confront new trials that test their courage, friendships, and beliefs. The Rebel Alliance has established a hidden base on the icy planet of Hoth, where they hope to regroup and plan their next moves against the Empire. Luke Skywalker receives a message from a familiar source, prompting him to seek further guidance in understanding his connection to the Force. Han Solo and Princess Leia's journey takes them on a dangerous path as they navigate a galaxy under Imperial control. Their actions and decisions lead to unforeseen consequences that will impact the fate of the Rebellion. Meanwhile, the dark presence of Darth Vader looms as he relentlessly pursues the Rebels while dealing with inner conflicts of his own."
+          },
+          {
+            "Kind": "Movie",
+            "Name": "Star Wars: Episode VI - Return of the Jedi",
+            "Directors": [ "Richard Marquand" ],
+            "Writers": [ "Lawrence Kasdan", "George Lucas" ],
+            "ReleaseDate": "1983.05.25",
+            "Description": "After rescuing Han Solo from Jabba the Hutt, the Rebel Alliance attempts to destroy the second Death Star while Luke struggles to help Darth Vader back from the dark side.",
+            "Storyline": "Luke Skywalker (Mark Hamill) battles horrible Jabba the Hut and cruel Darth Vader to save his comrades in the Rebel Alliance and triumph over the Galactic Empire. Han Solo (Harrison Ford) and Princess Leia (Carrie Fisher) reaffirm their love and team with Chewbacca, Lando Calrissian (Billy Dee Williams), the Ewoks and the androids C-3PO and R2-D2 to aid in the disruption of the Dark Side and the defeat of the evil emperor."
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,65 @@
+﻿<UserControl x:Class="MetroWpfApp.Views.EditMovieView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:minimal="http://schemas.minimalmvvm.com/winfx/xaml/mvvm"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewModels="clr-namespace:MetroWpfApp.ViewModels"
+             mc:Ignorable="d" 
+             d:DataContext="{d:DesignInstance {x:Type viewModels:EditMovieViewModel}, IsDesignTimeCreatable=True}"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Label Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" Content="Title" />
+        <TextBox Grid.Column="1" Grid.Row="0" Margin="5"
+                 x:Name="MovieNameTextBox" 
+                 mah:ControlsHelper.FocusBorderBrush="{DynamicResource MahApps.Brushes.Accent}"
+                 mah:TextBoxHelper.SelectAllOnFocus="True"
+                 Text="{Binding Movie.Name, UpdateSourceTrigger=PropertyChanged}"
+                 TextWrapping="Wrap">
+            <minimal:Interaction.Behaviors>
+                <minimal:FocusBehavior />
+            </minimal:Interaction.Behaviors>
+        </TextBox>
+
+        <Label Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" Content="Release Date" />
+        <DatePicker Grid.Column="1" Grid.Row="1" Margin="5" mah:TextBoxHelper.AutoWatermark="True"
+                    SelectedDate="{Binding Movie.ReleaseDate}" />
+
+        <Label Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" Content="Directors" />
+        <mah:MultiSelectionComboBox Grid.Column="1" Grid.Row="2" Margin="5"
+                                    DisplayMemberPath="Name"
+                                    mah:MultiSelectorHelper.SelectedItems="{Binding Movie.Directors}"
+                                    ItemsSource="{Binding MoviesService.Persons}"/>
+
+        <Label Grid.Column="0" Grid.Row="3" VerticalAlignment="Center" Content="Writers" />
+        <mah:MultiSelectionComboBox Grid.Column="1" Grid.Row="3" Margin="5"
+                                    DisplayMemberPath="Name"
+                                    mah:MultiSelectorHelper.SelectedItems="{Binding Movie.Writers}"
+                                    ItemsSource="{Binding MoviesService.Persons}"/>
+
+        <Label Grid.Column="0" Grid.Row="4" VerticalAlignment="Center" Content="Description" />
+        <TextBox Grid.Column="1" Grid.Row="4" Margin="5" TextWrapping="Wrap" 
+                 Text="{Binding Movie.Description}"/>
+
+        <Label Grid.Column="0" Grid.Row="5" VerticalAlignment="Center" Content="Storyline" />
+        <TextBox Grid.Column="1" Grid.Row="5" Margin="5" TextWrapping="Wrap" 
+                 AcceptsReturn="True" VerticalScrollBarVisibility="Auto"
+                 Text="{Binding Movie.Storyline}"/>
+
+    </Grid>
+</UserControl>

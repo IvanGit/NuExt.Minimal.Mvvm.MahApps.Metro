@@ -1,0 +1,28 @@
+﻿<mah:BaseMetroDialog x:Class="MahApps.Metro.Controls.Dialogs.MetroDialog"
+                     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                     xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+                     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                     xmlns:dialogs="clr-namespace:MahApps.Metro.Controls.Dialogs"
+                     mc:Ignorable="d" 
+                     d:DesignHeight="450" d:DesignWidth="800">
+    <mah:BaseMetroDialog.DialogBottom>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="{Binding DialogContentMargin, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type mah:BaseMetroDialog}}, Mode=OneWay}" />
+                <ColumnDefinition Width="{Binding DialogContentWidth, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type mah:BaseMetroDialog}}, Mode=OneWay}" />
+                <ColumnDefinition Width="{Binding DialogContentMargin, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type mah:BaseMetroDialog}}, Mode=OneWay}" />
+            </Grid.ColumnDefinitions>
+            <ItemsControl Grid.Column="1" x:Name="DialogButtons" Focusable="False" MinHeight="85" HorizontalAlignment="Right"
+                          ItemTemplateSelector="{StaticResource MetroDialogButtonTemplateSelector}"
+                          ItemsSource="{Binding CommandsSource, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type dialogs:MetroDialog}}, Mode=OneWay}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+        </Grid>
+    </mah:BaseMetroDialog.DialogBottom>
+</mah:BaseMetroDialog>

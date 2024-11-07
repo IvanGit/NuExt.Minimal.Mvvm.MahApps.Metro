@@ -1,0 +1,123 @@
+﻿<UserControl x:Class="MetroWpfApp.Views.MoviesView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:minimal="http://schemas.minimalmvvm.com/winfx/xaml/mvvm"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewModels="clr-namespace:MetroWpfApp.ViewModels"
+             xmlns:models="clr-namespace:MetroWpfApp.Models"
+             mc:Ignorable="d" 
+             d:DataContext="{d:DesignInstance {x:Type viewModels:MoviesViewModel}, IsDesignTimeCreatable=True}"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+
+        <viewModels:MoviesViewModelBindingProxy x:Key="MoviesProxy" DataContext="{Binding}" />
+
+        <DataTemplate x:Key="TreeViewItemBehaviors">
+            <ContentControl>
+                <minimal:EventTrigger EventName="MouseDoubleClick" Command="{Binding Source={StaticResource MoviesProxy}, Path=DataContext.OpenMovieCommand}" EventArgsConverter="{StaticResource ItemsControlMouseEventArgsConverter}"/>
+            </ContentControl>
+        </DataTemplate>
+
+        <Style x:Key="TreeViewItemContainerStyle" TargetType="{x:Type TreeViewItem}" BasedOn="{StaticResource {x:Type TreeViewItem}}">
+            <d:Style.DataContext>
+                <x:Type Type="models:MovieModelBase" />
+            </d:Style.DataContext>
+            <Setter Property="BorderBrush" Value="{DynamicResource MahApps.Brushes.Gray.SemiTransparent}" />
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}"/>
+            <Setter Property="minimal:Interaction.BehaviorsTemplate" Value="{StaticResource TreeViewItemBehaviors}"/>
+        </Style>
+
+    </UserControl.Resources>
+    <minimal:Interaction.Behaviors>
+        <minimal:EventTrigger EventName="Loaded" Command="{Binding LoadedCommand}" />
+        <minimal:EventTrigger EventName="Unloaded" Command="{Binding UnloadedCommand}" />
+        <minimal:SettingsService DirectoryName="{Binding EnvironmentService.SettingsDirectory}"/>
+    </minimal:Interaction.Behaviors>
+    <DockPanel Margin="2">
+
+        <StackPanel DockPanel.Dock="Left">
+            <StackPanel.Resources>
+                <Style BasedOn="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" TargetType="{x:Type Button}">
+                    <Setter Property="Foreground" Value="{DynamicResource MahApps.Brushes.AccentBase}"/>
+                    <Setter Property="ToolTipService.ShowOnDisabled" Value="True"/>
+                </Style>
+            </StackPanel.Resources>
+            <Button Command="{Binding NewGroupCommand}" ToolTip="New Group">
+                <iconPacks:PackIconMaterial Kind="FolderPlus" />
+            </Button>
+            <Button Command="{Binding NewMovieCommand}" ToolTip="New Movie">
+                <iconPacks:PackIconMaterial Kind="MoviePlus" />
+            </Button>
+            <Button Command="{Binding EditCommand}" ToolTip="Edit">
+                <iconPacks:PackIconMaterial Kind="Rename" />
+            </Button>
+            <Button Command="{Binding DeleteCommand}" ToolTip="Delete">
+                <iconPacks:PackIconMaterial Kind="Delete" />
+            </Button>
+            <Separator/>
+            <Button Command="{Binding OpenMovieCommand}" CommandParameter="{Binding SelectedItem, ElementName=MoviesTree}" ToolTip="Open Movie">
+                <iconPacks:PackIconMaterial Kind="MovieOpen" />
+            </Button>
+        </StackPanel>
+
+        <DockPanel Grid.IsSharedSizeScope="True">
+            <Grid DockPanel.Dock="Top">
+                <Grid.Resources>
+                    <Style TargetType="Border">
+                        <Setter Property="BorderBrush" Value="{DynamicResource MahApps.Brushes.ThemeForeground}"/>
+                    </Style>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="FontWeight" Value="Bold"/>
+                        <Setter Property="Margin" Value="5,0"/>
+                        <Setter Property="VerticalAlignment" Value="Center"/>
+                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                    </Style>
+                </Grid.Resources>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*" SharedSizeGroup="A"/>
+                    <ColumnDefinition Width="*" SharedSizeGroup="B"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Border Grid.Column="0" BorderThickness="1,1,0,0">
+                    <TextBlock Text="Title"/>
+                </Border>
+                <Border Grid.Column="1" BorderThickness="1,1,0,0">
+                    <TextBlock Text="Release Date"/>
+                </Border>
+                <Border Grid.Column="2" BorderThickness="1,1,0,0">
+                    <TextBlock Text="Director"/>
+                </Border>
+                <Border Grid.Column="3" BorderThickness="0,1,1,0">
+                    <Rectangle Width="{Binding Path=(minimal:ScrollBarVisibilityBehavior.VerticalScrollBarActualWidth), ElementName=MoviesTree}"/>
+                </Border>
+            </Grid>
+
+            <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal">
+                <Button Margin="2" Content="Expand All" Command="{Binding ExpandCollapseCommand}" CommandParameter="{x:Static mah:BooleanBoxes.TrueBox}"/>
+                <Button Margin="2" Content="Collapse All" Command="{Binding ExpandCollapseCommand}" CommandParameter="{x:Static mah:BooleanBoxes.FalseBox}"/>
+                <TextBlock Margin="5,0" VerticalAlignment="Center" 
+                           Text="You can move items by drag'n'drop between groups with mouse"/>
+            </StackPanel>
+
+            <TreeView x:Name="MoviesTree" BorderThickness="1" AllowDrop="True"
+                      ItemsSource="{Binding MoviesView}"
+                      ItemTemplateSelector="{StaticResource MovieItemTemplateSelector}"
+                      Style="{StaticResource MahApps.Styles.TreeView.Virtualized}"
+                      ItemContainerStyle="{StaticResource TreeViewItemContainerStyle}">
+                <minimal:Interaction.Behaviors>
+                    <minimal:TreeViewSelectedItemBehavior SelectedItem="{Binding SelectedItem}" />
+                    <minimal:ScrollBarVisibilityBehavior />
+                    <minimal:TreeViewDragDropBehavior MoveCommand="{Binding MoveCommand}" />
+                    <!--<minimal:EventTrigger PassEventArgsToCommand="True" Command="{Binding MouseDoubleClickCommand}" CommandParameter="{Binding Path=SelectedItem, RelativeSource={RelativeSource FindAncestor, AncestorType=TreeView, AncestorLevel=1}}" EventName="MouseDoubleClick" />-->
+                </minimal:Interaction.Behaviors>
+            </TreeView>
+        </DockPanel>
+
+    </DockPanel>
+</UserControl>
