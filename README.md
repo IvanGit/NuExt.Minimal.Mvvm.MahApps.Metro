@@ -13,6 +13,10 @@
 
 The `MetroTabbedDocumentService` class is responsible for managing tabbed documents within a UI that utilizes the Metro design language. It extends the `DocumentServiceBase` and implements interfaces for asynchronous document management and disposal. This service allows for the creation, binding, and lifecycle management of tabbed documents within `MetroTabControl`.
 
+### Recommended Companion Package
+
+For an enhanced development experience, we highly recommend using the [`NuExt.Minimal.Mvvm.SourceGenerator`](https://www.nuget.org/packages/NuExt.Minimal.Mvvm.SourceGenerator) package alongside this framework. It provides a source generator that produces boilerplate code for your ViewModels at compile time, significantly reducing the amount of repetitive coding tasks and allowing you to focus more on the application-specific logic.
+
 ### Installation
 
 You can install `NuExt.Minimal.Mvvm.MahApps.Metro` via [NuGet](https://www.nuget.org/):

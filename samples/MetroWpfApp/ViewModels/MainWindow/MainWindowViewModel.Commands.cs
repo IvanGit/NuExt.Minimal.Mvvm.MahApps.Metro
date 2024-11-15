@@ -1,9 +1,11 @@
 ﻿using ControlzEx.Theming;
 using MetroWpfApp.Views;
+using Minimal.Mvvm;
 using Minimal.Mvvm.Windows;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
+using static AccessModifier;
 
 namespace MetroWpfApp.ViewModels
 {
@@ -11,47 +13,23 @@ namespace MetroWpfApp.ViewModels
     {
         #region Commands
 
+        [Notify(Setter = Private)]
         private ICommand? _activeDocumentChangedCommand;
-        public ICommand? ActiveDocumentChangedCommand
-        {
-            get => _activeDocumentChangedCommand;
-            private set => SetProperty(ref _activeDocumentChangedCommand, value);
-        }
 
+        [Notify(Setter = Private)]
         private ICommand? _changeAccentColorCommand;
-        public ICommand? ChangeAccentColorCommand
-        {
-            get => _changeAccentColorCommand;
-            private set => SetProperty(ref _changeAccentColorCommand, value);
-        }
 
+        [Notify(Setter = Private)]
         private ICommand? _changeAppThemeCommand;
-        public ICommand? ChangeAppThemeCommand
-        {
-            get => _changeAppThemeCommand;
-            private set => SetProperty(ref _changeAppThemeCommand, value);
-        }
 
+        [Notify(Setter = Private)]
         private ICommand? _closeActiveDocumentCommand;
-        public ICommand? CloseActiveDocumentCommand
-        {
-            get => _closeActiveDocumentCommand;
-            private set => SetProperty(ref _closeActiveDocumentCommand, value);
-        }
 
+        [Notify(Setter = Private)]
         private ICommand? _showHideActiveDocumentCommand;
-        public ICommand? ShowHideActiveDocumentCommand
-        {
-            get => _showHideActiveDocumentCommand;
-            private set => SetProperty(ref _showHideActiveDocumentCommand, value);
-        }
 
+        [Notify(Setter = Private)]
         private ICommand? _showMoviesCommand;
-        public ICommand? ShowMoviesCommand
-        {
-            get => _showMoviesCommand;
-            private set => SetProperty(ref _showMoviesCommand, value);
-        }
 
         #endregion
 

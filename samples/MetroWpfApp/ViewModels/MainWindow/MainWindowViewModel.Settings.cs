@@ -1,4 +1,5 @@
 ﻿using MetroWpfApp.Models;
+using Minimal.Mvvm;
 using System.Diagnostics;
 
 namespace MetroWpfApp.ViewModels
@@ -7,12 +8,8 @@ namespace MetroWpfApp.ViewModels
     {
         #region Properties
 
+        [Notify]
         private MainWindowSettings? _settings;
-        public MainWindowSettings? Settings
-        {
-            get => _settings;
-            set => SetProperty(ref _settings, value);
-        }
 
         #endregion
 
@@ -25,8 +22,7 @@ namespace MetroWpfApp.ViewModels
                 return;
             }
             Settings = new MainWindowSettings();
-            Settings.Initialize();
-            Settings.SuspendChanges();
+            Lifetime.AddBracket(Settings.Initialize, Settings.Uninitialize);
             Lifetime.AddBracket(LoadSettings, SaveSettings);
         }
 
@@ -35,14 +31,9 @@ namespace MetroWpfApp.ViewModels
             Debug.Assert(IsInitialized, $"{GetType().FullName} ({DisplayName ?? "Unnamed"}) ({GetHashCode()}) is not initialized.");
             Debug.Assert(SettingsService != null, $"{nameof(SettingsService)} is null");
             Debug.Assert(Settings != null, $"{nameof(Settings)} is null");
-            if (Settings!.IsSuspended)
+            using (Settings!.SuspendDirty())
             {
-                Settings.ResumeChanges();
-                Debug.Assert(Settings.IsSuspended == false);
-                using (Settings.SuspendDirty())
-                {
-                    SettingsService!.LoadSettings(Settings);
-                }
+                SettingsService!.LoadSettings(Settings);
             }
         }
 
@@ -50,12 +41,9 @@ namespace MetroWpfApp.ViewModels
         {
             Debug.Assert(SettingsService != null, $"{nameof(SettingsService)} is null");
             Debug.Assert(Settings != null, $"{nameof(Settings)} is null");
-            if (Settings!.IsDirty)
+            if (Settings!.IsDirty && SettingsService!.SaveSettings(Settings))
             {
-                if (SettingsService!.SaveSettings(Settings))
-                {
-                    Settings.ResetDirty();
-                }
+                Settings.ResetDirty();
             }
         }
 

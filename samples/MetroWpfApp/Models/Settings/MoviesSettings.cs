@@ -2,13 +2,9 @@
 
 namespace MetroWpfApp.Models
 {
-    public sealed class MoviesSettings: SettingsBase
+    public sealed partial class MoviesSettings: SettingsBase
     {
+        [Notify]
         private string? _selectedPath;
-        public string? SelectedPath
-        {
-            get => _selectedPath;
-            set => SetProperty(ref _selectedPath, value);
-        }
     }
 }

@@ -1,8 +1,10 @@
 ﻿using MahApps.Metro.Controls.Dialogs;
 using MetroWpfApp.Models;
 using MetroWpfApp.Views;
+using Minimal.Mvvm;
 using System.Windows;
 using System.Windows.Input;
+using static AccessModifier;
 
 namespace MetroWpfApp.ViewModels
 {
@@ -10,54 +12,26 @@ namespace MetroWpfApp.ViewModels
     {
         #region Commands
 
+        [Notify(Setter = Private)]
         private ICommand? _deleteCommand;
-        public ICommand? DeleteCommand
-        {
-            get => _deleteCommand;
-            private set => SetProperty(ref _deleteCommand, value);
-        }
 
+        [Notify(Setter = Private)]
         private ICommand? _editCommand;
-        public ICommand? EditCommand
-        {
-            get => _editCommand;
-            private set => SetProperty(ref _editCommand, value);
-        }
 
+        [Notify(Setter = Private)]
         private ICommand? _expandCollapseCommand;
-        public ICommand? ExpandCollapseCommand
-        {
-            get => _expandCollapseCommand;
-            private set => SetProperty(ref _expandCollapseCommand, value);
-        }
 
+        [Notify(Setter = Private)]
         private ICommand? _moveCommand;
-        public ICommand? MoveCommand
-        {
-            get => _moveCommand;
-            private set => SetProperty(ref _moveCommand, value);
-        }
 
+        [Notify(Setter = Private)]
         private ICommand? _newGroupCommand;
-        public ICommand? NewGroupCommand
-        {
-            get => _newGroupCommand;
-            private set => SetProperty(ref _newGroupCommand, value);
-        }
 
+        [Notify(Setter = Private)]
         private ICommand? _newMovieCommand;
-        public ICommand? NewMovieCommand
-        {
-            get => _newMovieCommand;
-            private set => SetProperty(ref _newMovieCommand, value);
-        }
 
+        [Notify(Setter = Private)]
         private ICommand? _openMovieCommand;
-        public ICommand? OpenMovieCommand
-        {
-            get => _openMovieCommand;
-            private set => SetProperty(ref _openMovieCommand, value);
-        }
 
         #endregion
 

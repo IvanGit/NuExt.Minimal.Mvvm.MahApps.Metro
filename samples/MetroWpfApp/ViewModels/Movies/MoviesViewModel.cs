@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Data;
+using static AccessModifier;
 
 namespace MetroWpfApp.ViewModels
 {
@@ -15,26 +16,14 @@ namespace MetroWpfApp.ViewModels
     {
         #region Properties
 
+        [Notify(Setter = Private)]
         private ObservableCollection<MovieModelBase>? _movies;
-        public ObservableCollection<MovieModelBase>? Movies
-        {
-            get => _movies;
-            private set => SetProperty(ref _movies, value);
-        }
 
+        [Notify(Setter = Private)]
         private ListCollectionView? _moviesView;
-        public ListCollectionView? MoviesView
-        {
-            get => _moviesView;
-            private set => SetProperty(ref _moviesView, value);
-        }
 
+        [Notify(CallbackName = nameof(OnSelectedItemChanged))]
         private MovieModelBase? _selectedItem;
-        public MovieModelBase? SelectedItem
-        {
-            get => _selectedItem;
-            set => SetProperty(ref _selectedItem, value, OnSelectedItemChanged);
-        }
 
         #endregion
 

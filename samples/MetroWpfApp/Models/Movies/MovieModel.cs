@@ -1,28 +1,18 @@
-﻿using MetroWpfApp.Converters;
+﻿using Minimal.Mvvm;
 using System.Collections.ObjectModel;
 using System.Text.Json.Serialization;
 
 namespace MetroWpfApp.Models
 {
-    public sealed class MovieModel : MovieModelBase
+    public sealed partial class MovieModel : MovieModelBase
     {
         #region Properties
 
         [JsonIgnore]
         public override bool CanDrag => true;
 
-        private string _description = null!;
-        [JsonPropertyOrder(5)]
-        public string Description
-        {
-            get => _description;
-            set => SetProperty(ref _description, value);
-        }
-
-        [JsonIgnore] public PersonModel? Director => Directors.FirstOrDefault();
-
-        [JsonPropertyOrder(2)]
-        public ObservableCollection<PersonModel> Directors { get; set; } = new();
+        [JsonIgnore]
+        public PersonModel? Director => Directors.FirstOrDefault();
 
         [JsonIgnore]
         public override bool IsEditable => true;
@@ -30,25 +20,21 @@ namespace MetroWpfApp.Models
         [JsonPropertyOrder(0)]
         public override MovieKind Kind => MovieKind.Movie;
 
-        private DateTime _releaseDate;
-        [JsonPropertyOrder(4)]
-        [JsonConverter(typeof(JsonMovieReleaseDateConverter))]
-        public DateTime ReleaseDate
-        {
-            get => _releaseDate;
-            set => SetProperty(ref _releaseDate, value);
-        }
-
-        private string _storyline = null!;
-        [JsonPropertyOrder(6)]
-        public string Storyline
-        {
-            get => _storyline;
-            set => SetProperty(ref _storyline, value);
-        }
+        [JsonPropertyOrder(2)]
+        public ObservableCollection<PersonModel> Directors { get; set; } = new();
 
         [JsonPropertyOrder(3)]
         public ObservableCollection<PersonModel> Writers { get; set; } = new();
+
+        [Notify, CustomAttribute("[global::System.Text.Json.Serialization.JsonPropertyOrder(4)]")]
+        [CustomAttribute("[global::System.Text.Json.Serialization.JsonConverter(typeof(MetroWpfApp.Converters.JsonMovieReleaseDateConverter))]")]
+        private DateTime _releaseDate;
+
+        [Notify, CustomAttribute("[global::System.Text.Json.Serialization.JsonPropertyOrder(5)]")]
+        private string _description = null!;
+
+        [Notify, CustomAttribute("[global::System.Text.Json.Serialization.JsonPropertyOrder(6)]")]
+        private string _storyline = null!;
 
         #endregion
 

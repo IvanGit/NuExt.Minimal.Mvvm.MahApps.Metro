@@ -2,14 +2,10 @@
 
 namespace MetroWpfApp.Models
 {
-    public sealed class MainWindowSettings : SettingsBase
+    public sealed partial class MainWindowSettings : SettingsBase
     {
+        [Notify]
         private bool _moviesOpened;
-        public bool MoviesOpened
-        {
-            get => _moviesOpened;
-            set => SetProperty(ref _moviesOpened, value);
-        }
 
         protected override void OnInitialize()
         {

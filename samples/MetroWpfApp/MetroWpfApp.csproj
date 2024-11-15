@@ -2,24 +2,32 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFrameworks>net8.0-windows;net6.0-windows;net462</TargetFrameworks>
+    <TargetFrameworks>net9.0-windows;net8.0-windows;net462</TargetFrameworks>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\NuExt.Minimal.Mvvm.MahApps.Metro.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.0" />
     <PackageReference Include="NLog.Extensions.Logging" Version="5.3.14" />
     <PackageReference Include="MahApps.Metro.IconPacks.Material" Version="5.1.0" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net462'">
-    <PackageReference Include="Microsoft.Extensions.Logging" Version="8.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="9.0.0" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(UseNuExtPackages)' == 'true'">
+    <PackageReference Include="NuExt.Minimal.Mvvm.SourceGenerator" Version="0.2.0" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(UseNuExtPackages)' == 'false'">
+    <ProjectReference Include="..\..\..\NuExt.Minimal.Mvvm.SourceGenerator\src\NuExt.Minimal.Mvvm.SourceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\NuExt.Minimal.Mvvm.MahApps.Metro.csproj" />
   </ItemGroup>
 
   <ItemGroup>

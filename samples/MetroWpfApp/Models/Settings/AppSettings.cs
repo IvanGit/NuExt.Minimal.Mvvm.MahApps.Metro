@@ -2,13 +2,9 @@
 
 namespace MetroWpfApp.Models
 {
-    public sealed class AppSettings : SettingsBase
+    public sealed partial class AppSettings : SettingsBase
     {
+        [Notify]
         private string? _appTheme;
-        public string? AppTheme
-        {
-            get => _appTheme;
-            set => SetProperty(ref _appTheme, value);
-        }
     }
 }

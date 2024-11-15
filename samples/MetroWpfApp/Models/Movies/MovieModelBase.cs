@@ -6,7 +6,7 @@ using System.Windows;
 namespace MetroWpfApp.Models
 {
     [DebuggerDisplay("Name={Name}")]
-    public abstract class MovieModelBase: BindableBase, ICloneable<MovieModelBase>, IDragDrop
+    public abstract partial class MovieModelBase: BindableBase, ICloneable<MovieModelBase>, IDragDrop
     {
 
         #region Properties
@@ -17,32 +17,17 @@ namespace MetroWpfApp.Models
         [JsonIgnore]
         public abstract bool IsEditable { get; }
 
+        [Notify, CustomAttribute("[global::System.Text.Json.Serialization.JsonIgnore]")]
         private bool _isExpanded;
-        [JsonIgnore]
-        public bool IsExpanded
-        {
-            get => _isExpanded;
-            set => SetProperty(ref _isExpanded, value);
-        }
 
         [JsonPropertyOrder(0)]
         public abstract MovieKind Kind { get; }
 
+        [Notify, CustomAttribute("[global::System.Text.Json.Serialization.JsonPropertyOrder(1)]")]
         private string _name = null!;
-        [JsonPropertyOrder(1)]
-        public string Name
-        {
-            get => _name;
-            set => SetProperty(ref _name, value);
-        }
 
+        [Notify, CustomAttribute("[global::System.Text.Json.Serialization.JsonIgnore]")]
         private MovieGroupModel? _parent;
-        [JsonIgnore]
-        public MovieGroupModel? Parent
-        {
-            get => _parent;
-            set => SetProperty(ref _parent, value);
-        }
 
         #endregion
 

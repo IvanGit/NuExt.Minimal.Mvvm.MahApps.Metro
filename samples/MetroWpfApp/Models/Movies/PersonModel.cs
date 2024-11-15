@@ -4,16 +4,12 @@ using System.Diagnostics;
 namespace MetroWpfApp.Models
 {
     [DebuggerDisplay("Name={Name}")]
-    public sealed class PersonModel: BindableBase, ICloneable<PersonModel>
+    public sealed partial class PersonModel: BindableBase, ICloneable<PersonModel>
     {
         #region Properties
 
+        [Notify]
         private string _name = null!;
-        public required string Name
-        {
-            get => _name;
-            set => SetProperty(ref _name, value);
-        }
 
         #endregion
 
