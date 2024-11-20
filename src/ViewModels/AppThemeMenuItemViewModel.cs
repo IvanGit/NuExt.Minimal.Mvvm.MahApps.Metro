@@ -2,11 +2,10 @@
 
 namespace Minimal.Mvvm.Windows
 {
-    public class AccentColorMenuItemViewModel : MenuItemViewModel
+    public partial class AccentColorMenuItemViewModel : MenuItemViewModel
     {
-        public Brush? BorderColorBrush { get; set; }
-
-        public Brush? ColorBrush { get; set; }
+        [Notify] private Brush? _borderColorBrush;
+        [Notify] private Brush? _colorBrush;
     }
 
     public class AppThemeMenuItemViewModel : AccentColorMenuItemViewModel

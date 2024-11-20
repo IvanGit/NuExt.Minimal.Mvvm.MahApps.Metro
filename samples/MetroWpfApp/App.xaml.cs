@@ -239,7 +239,7 @@ namespace MetroWpfApp
         private void InitializeSettings()
         {
             Debug.Assert(SettingsService != null, $"{nameof(SettingsService)} is null");
-            Settings.Initialize();
+            _lifetime.AddBracket(Settings.Initialize, Settings.Uninitialize);
             _lifetime.AddBracket(LoadSettings, SaveSettings);
         }
 
@@ -256,12 +256,9 @@ namespace MetroWpfApp
         private void SaveSettings()
         {
             Debug.Assert(SettingsService != null, $"{nameof(SettingsService)} is null");
-            if (Settings.IsDirty)
+            if (Settings.IsDirty && SettingsService!.SaveSettings(Settings))
             {
-                if (SettingsService?.SaveSettings(Settings) == true)
-                {
-                    Settings.ResetDirty();
-                }
+                Settings.ResetDirty();
             }
         }
 

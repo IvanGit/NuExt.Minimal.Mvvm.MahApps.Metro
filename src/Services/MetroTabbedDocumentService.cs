@@ -181,7 +181,7 @@ namespace Minimal.Mvvm.Windows
 
         #endregion
 
-        private readonly ObservableCollection<IAsyncDocument> _documents = new();
+        private readonly ObservableCollection<IAsyncDocument> _documents = [];
         private bool _isActiveDocumentChanging;
         private IDisposable? _subscription;
 

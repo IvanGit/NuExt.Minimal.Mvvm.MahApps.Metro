@@ -5,6 +5,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:minimal="http://schemas.minimalmvvm.com/winfx/xaml/mvvm"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="clr-namespace:MetroWpfApp"
              xmlns:viewModels="clr-namespace:MetroWpfApp.ViewModels"
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance {x:Type viewModels:EditMovieViewModel}, IsDesignTimeCreatable=True}"
@@ -24,7 +25,7 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <Label Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" Content="Title" />
+        <Label Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" Content="{x:Static local:Loc.Title}" />
         <TextBox Grid.Column="1" Grid.Row="0" Margin="5"
                  x:Name="MovieNameTextBox" 
                  mah:ControlsHelper.FocusBorderBrush="{DynamicResource MahApps.Brushes.Accent}"
@@ -36,27 +37,27 @@
             </minimal:Interaction.Behaviors>
         </TextBox>
 
-        <Label Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" Content="Release Date" />
+        <Label Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" Content="{x:Static local:Loc.Release_Date}" />
         <DatePicker Grid.Column="1" Grid.Row="1" Margin="5" mah:TextBoxHelper.AutoWatermark="True"
                     SelectedDate="{Binding Movie.ReleaseDate}" />
 
-        <Label Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" Content="Directors" />
+        <Label Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" Content="{x:Static local:Loc.Directors}" />
         <mah:MultiSelectionComboBox Grid.Column="1" Grid.Row="2" Margin="5"
                                     DisplayMemberPath="Name"
                                     mah:MultiSelectorHelper.SelectedItems="{Binding Movie.Directors}"
                                     ItemsSource="{Binding MoviesService.Persons}"/>
 
-        <Label Grid.Column="0" Grid.Row="3" VerticalAlignment="Center" Content="Writers" />
+        <Label Grid.Column="0" Grid.Row="3" VerticalAlignment="Center" Content="{x:Static local:Loc.Writers}" />
         <mah:MultiSelectionComboBox Grid.Column="1" Grid.Row="3" Margin="5"
                                     DisplayMemberPath="Name"
                                     mah:MultiSelectorHelper.SelectedItems="{Binding Movie.Writers}"
                                     ItemsSource="{Binding MoviesService.Persons}"/>
 
-        <Label Grid.Column="0" Grid.Row="4" VerticalAlignment="Center" Content="Description" />
+        <Label Grid.Column="0" Grid.Row="4" VerticalAlignment="Center" Content="{x:Static local:Loc.Description}" />
         <TextBox Grid.Column="1" Grid.Row="4" Margin="5" TextWrapping="Wrap" 
                  Text="{Binding Movie.Description}"/>
 
-        <Label Grid.Column="0" Grid.Row="5" VerticalAlignment="Center" Content="Storyline" />
+        <Label Grid.Column="0" Grid.Row="5" VerticalAlignment="Center" Content="{x:Static local:Loc.Storyline}" />
         <TextBox Grid.Column="1" Grid.Row="5" Margin="5" TextWrapping="Wrap" 
                  AcceptsReturn="True" VerticalScrollBarVisibility="Auto"
                  Text="{Binding Movie.Storyline}"/>

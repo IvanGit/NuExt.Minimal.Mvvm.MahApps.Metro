@@ -21,7 +21,7 @@ namespace MetroWpfApp.ViewModels
         [Notify(CallbackName = nameof(OnActiveDocumentChanged))]
         private IAsyncDocument? _activeDocument;
 
-        public ObservableCollection<MenuItemViewModel> MenuItems { get; } = new();
+        public ObservableCollection<MenuItemViewModel> MenuItems { get; } = [];
 
         #endregion
 
@@ -65,22 +65,22 @@ namespace MetroWpfApp.ViewModels
             {
                 new()
                 {
-                    Header = "File",
+                    Header = Loc.File,
                     SubMenuItems=new ObservableCollection<MenuItemViewModel?>(new MenuItemViewModel?[]
                     {
-                        new() { Header = "Movies", Command = ShowMoviesCommand },
+                        new() { Header = Loc.Movies, Command = ShowMoviesCommand },
                         null,
-                        new() { Header = "Exit", Command = CloseCommand }
+                        new() { Header = Loc.Exit, Command = CloseCommand }
                     })
                 },
                 new()
                 {
-                    Header = "View",
+                    Header = Loc.View,
                     SubMenuItems=new ObservableCollection<MenuItemViewModel?>(new MenuItemViewModel?[]
                     {
                         new()
                         {
-                            Header = "Theme",
+                            Header = Loc.Theme,
                             SubMenuItems=new ObservableCollection<MenuItemViewModel?>(ThemeManager.Current.Themes
                                 .GroupBy(x => x.BaseColorScheme)
                                 .Select(x => x.First())
@@ -88,16 +88,16 @@ namespace MetroWpfApp.ViewModels
                         },
                         new()
                         {
-                            Header = "Accent",
+                            Header = Loc.Accent,
                             SubMenuItems=new ObservableCollection<MenuItemViewModel?>(ThemeManager.Current.Themes
                                 .GroupBy(x => x.ColorScheme)
                                 .OrderBy(a => a.Key)
                                 .Select(a => new AccentColorMenuItemViewModel { Header = a.Key, ColorBrush = a.First().ShowcaseBrush, Command = ChangeAccentColorCommand, CommandParameter = a.Key }))
                         },
                         null,
-                        new() { Header = "Hide Active Document", CommandParameter = false, Command = ShowHideActiveDocumentCommand },
-                        new() { Header = "Show Active Document", CommandParameter = true, Command = ShowHideActiveDocumentCommand },
-                        new() { Header = "Close Active Document", Command = CloseActiveDocumentCommand }
+                        new() { Header = Loc.Hide_Active_Document, CommandParameter = false, Command = ShowHideActiveDocumentCommand },
+                        new() { Header = Loc.Show_Active_Document, CommandParameter = true, Command = ShowHideActiveDocumentCommand },
+                        new() { Header = Loc.Close_Active_Document, Command = CloseActiveDocumentCommand }
                     })
                 }
             };
@@ -116,7 +116,7 @@ namespace MetroWpfApp.ViewModels
         protected override void OnError(Exception ex, [CallerMemberName] string? callerName = null)
         {
             base.OnError(ex, callerName);
-            MessageBox.Show($"An error has occurred in {callerName}:{Environment.NewLine}{ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageBox.Show(string.Format(Loc.An_error_has_occurred_in_Arg0_Arg1, callerName, ex.Message), Loc.Error, MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
         protected override async Task OnInitializeAsync(CancellationToken cancellationToken)

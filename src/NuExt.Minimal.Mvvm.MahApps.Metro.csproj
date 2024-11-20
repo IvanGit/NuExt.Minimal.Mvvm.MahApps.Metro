@@ -14,7 +14,7 @@ Minimal.Mvvm.Windows.DialogCoordinatorService
 Minimal.Mvvm.Windows.MetroDialogService
 Minimal.Mvvm.Windows.MetroTabbedDocumentService
 MahApps.Metro.Controls.Dialogs.MetroDialog</Description>
-    <Version>0.2.0-pre</Version>
+    <Version>0.2.1-pre</Version>
     <RootNamespace>Minimal.Mvvm.Windows</RootNamespace>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);1591</NoWarn>
@@ -29,11 +29,14 @@ MahApps.Metro.Controls.Dialogs.MetroDialog</Description>
   </ItemGroup>
 
   <ItemGroup Condition="'$(UseNuExtPackages)' == 'true'">
-    <PackageReference Include="NuExt.Minimal.Mvvm.Windows" Version="0.2.0" />
+    <PackageReference Include="NuExt.Minimal.Mvvm.Windows" Version="0.2.1" />
+    <PackageReference Include="NuExt.Minimal.Mvvm.SourceGenerator" Version="0.2.3" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(UseNuExtPackages)' == 'false'">
     <ProjectReference Include="..\..\NuExt.Minimal.Mvvm.Windows\src\NuExt.Minimal.Mvvm.Windows.csproj" />
+    <ProjectReference Include="..\..\NuExt.Minimal.Mvvm.SourceGenerator\src\NuExt.Minimal.Mvvm.SourceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+
   </ItemGroup>
 
   <ItemGroup>

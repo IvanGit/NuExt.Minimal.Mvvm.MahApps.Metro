@@ -3,42 +3,18 @@ using MetroWpfApp.Models;
 using MetroWpfApp.Views;
 using Minimal.Mvvm;
 using System.Windows;
-using System.Windows.Input;
 using static AccessModifier;
 
 namespace MetroWpfApp.ViewModels
 {
     partial class MoviesViewModel
     {
-        #region Commands
-
-        [Notify(Setter = Private)]
-        private ICommand? _deleteCommand;
-
-        [Notify(Setter = Private)]
-        private ICommand? _editCommand;
-
-        [Notify(Setter = Private)]
-        private ICommand? _expandCollapseCommand;
-
-        [Notify(Setter = Private)]
-        private ICommand? _moveCommand;
-
-        [Notify(Setter = Private)]
-        private ICommand? _newGroupCommand;
-
-        [Notify(Setter = Private)]
-        private ICommand? _newMovieCommand;
-
-        [Notify(Setter = Private)]
-        private ICommand? _openMovieCommand;
-
-        #endregion
-
+ 
         #region Command Methods
 
         private bool CanDelete() => CanEdit();
 
+        [Notify(Setter = Private)]
         private async Task DeleteAsync()
         {
             var cancellationToken = GetCurrentCancellationToken();
@@ -49,8 +25,8 @@ namespace MetroWpfApp.ViewModels
                 DefaultText = SelectedItem?.Name ?? string.Empty,
             };
 
-            var dialogResult = await DialogCoordinator!.ShowMessageAsync(this, "Confirmation",
-                $"Are you sure you want to delete '{SelectedItem?.Name}'?",
+            var dialogResult = await DialogCoordinator!.ShowMessageAsync(this, Loc.Confirmation,
+                string.Format(Loc.Are_you_sure_you_want_to_delete__Arg0__ ,SelectedItem?.Name),
                 MessageDialogStyle.AffirmativeAndNegative, dialogSettings);
             if (dialogResult != MessageDialogResult.Affirmative)
             {
@@ -78,6 +54,7 @@ namespace MetroWpfApp.ViewModels
             return IsUsable && SelectedItem?.IsEditable == true && DialogCoordinator != null && DialogService != null;
         }
 
+        [Notify(Setter = Private)]
         private async Task EditAsync()
         {
             var cancellationToken = GetCurrentCancellationToken();
@@ -92,8 +69,8 @@ namespace MetroWpfApp.ViewModels
                         CancellationToken = cancellationToken,
                         DefaultText = group.Name,
                     };
-                    var groupName = await DialogCoordinator!.ShowInputAsync(this, "Edit Group Name",
-                        "Enter new group name", dialogSettings);
+                    var groupName = await DialogCoordinator!.ShowInputAsync(this, Loc.Edit_Group_Name,
+                        Loc.Enter_new_group_name, dialogSettings);
                     if (string.IsNullOrWhiteSpace(groupName))
                     {
                         return;
@@ -104,7 +81,7 @@ namespace MetroWpfApp.ViewModels
 
                     await using (var viewModel = new EditMovieViewModel())
                     {
-                        var dlgResult = await DialogService!.ShowDialogAsync(MessageBoxButton.OKCancel, "Edit Movie",
+                        var dlgResult = await DialogService!.ShowDialogAsync(MessageBoxButton.OKCancel, Loc.Edit_Movie,
                             nameof(EditMovieView), viewModel, this, movie, cancellationToken);
                         if (dlgResult != MessageBoxResult.OK)
                         {
@@ -130,14 +107,15 @@ namespace MetroWpfApp.ViewModels
             return IsUsable && SelectedItem is MovieGroupModel { IsLost: false } && DialogCoordinator != null && DialogService != null;
         }
 
+        [Notify(Setter = Private)]
         private async Task NewGroupAsync()
         {
             var cancellationToken = GetCurrentCancellationToken();
 
             var dialogSettings = new MetroDialogSettings { CancellationToken = cancellationToken };
 
-            var groupName = await DialogCoordinator!.ShowInputAsync(this, "New Group Name",
-                "Enter new group name", dialogSettings);
+            var groupName = await DialogCoordinator!.ShowInputAsync(this, Loc.New_Group_Name,
+                Loc.Enter_new_group_name, dialogSettings);
             if (string.IsNullOrWhiteSpace(groupName))
             {
                 return;
@@ -162,6 +140,7 @@ namespace MetroWpfApp.ViewModels
 
         private bool CanNewMovie() => CanNewGroup();
 
+        [Notify(Setter = Private)]
         private async Task NewMovieAsync()
         {
             var cancellationToken = GetCurrentCancellationToken();
@@ -170,12 +149,12 @@ namespace MetroWpfApp.ViewModels
 
             var movie = new MovieModel()
             {
-                Name = "New Movie",
+                Name = Loc.New_Movie,
                 ReleaseDate = DateTime.Today,
                 Parent = SelectedItem is MovieGroupModel { IsRoot: false } group ? group : null
             };
 
-            var dlgResult = await DialogService!.ShowDialogAsync(MessageBoxButton.OKCancel, "New Movie", nameof(EditMovieView), viewModel, this, movie, cancellationToken);
+            var dlgResult = await DialogService!.ShowDialogAsync(MessageBoxButton.OKCancel, Loc.New_Movie, nameof(EditMovieView), viewModel, this, movie, cancellationToken);
             if (dlgResult != MessageBoxResult.OK)
             {
                 return;
@@ -197,6 +176,7 @@ namespace MetroWpfApp.ViewModels
             return IsUsable && item is MovieModel && ParentViewModel is not null;
         }
 
+        [Notify(Setter = Private)]
         private async Task OpenMovieAsync(MovieModelBase? item)
         {
             var cancellationToken = GetCurrentCancellationToken();
@@ -208,6 +188,7 @@ namespace MetroWpfApp.ViewModels
             return IsUsable && draggedObject?.CanDrag == true;
         }
 
+        [Notify(Setter = Private)]
         private async Task MoveAsync(MovieModelBase? draggedObject)
         {
             var cancellationToken = GetCurrentCancellationToken();
@@ -219,6 +200,7 @@ namespace MetroWpfApp.ViewModels
             SelectedItem = item;
         }
 
+        [Notify(Setter = Private)]
         private void ExpandOrCollapse(bool expand)
         {
             if (expand)
@@ -244,7 +226,7 @@ namespace MetroWpfApp.ViewModels
             NewMovieCommand = RegisterAsyncCommand(NewMovieAsync, CanNewMovie);
             MoveCommand = RegisterAsyncCommand<MovieModelBase?>(MoveAsync, CanMove);
             OpenMovieCommand = RegisterAsyncCommand<MovieModelBase?>(OpenMovieAsync, CanOpenMovie);
-            ExpandCollapseCommand = RegisterCommand<bool>(ExpandOrCollapse, _ => IsUsable);
+            ExpandOrCollapseCommand = RegisterCommand<bool>(ExpandOrCollapse, _ => IsUsable);
         }
 
         protected override void OnLoaded()

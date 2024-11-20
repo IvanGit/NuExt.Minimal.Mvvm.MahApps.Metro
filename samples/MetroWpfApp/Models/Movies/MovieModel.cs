@@ -21,19 +21,19 @@ namespace MetroWpfApp.Models
         public override MovieKind Kind => MovieKind.Movie;
 
         [JsonPropertyOrder(2)]
-        public ObservableCollection<PersonModel> Directors { get; set; } = new();
+        public ObservableCollection<PersonModel> Directors { get; set; } = [];
 
         [JsonPropertyOrder(3)]
-        public ObservableCollection<PersonModel> Writers { get; set; } = new();
+        public ObservableCollection<PersonModel> Writers { get; set; } = [];
 
-        [Notify, CustomAttribute("[global::System.Text.Json.Serialization.JsonPropertyOrder(4)]")]
-        [CustomAttribute("[global::System.Text.Json.Serialization.JsonConverter(typeof(MetroWpfApp.Converters.JsonMovieReleaseDateConverter))]")]
+        [Notify, CustomAttribute("global::System.Text.Json.Serialization.JsonPropertyOrder(4)")]
+        [CustomAttribute("global::System.Text.Json.Serialization.JsonConverter(typeof(MetroWpfApp.Converters.JsonMovieReleaseDateConverter))")]
         private DateTime _releaseDate;
 
-        [Notify, CustomAttribute("[global::System.Text.Json.Serialization.JsonPropertyOrder(5)]")]
+        [Notify, CustomAttribute("global::System.Text.Json.Serialization.JsonPropertyOrder(5)")]
         private string _description = null!;
 
-        [Notify, CustomAttribute("[global::System.Text.Json.Serialization.JsonPropertyOrder(6)]")]
+        [Notify, CustomAttribute("global::System.Text.Json.Serialization.JsonPropertyOrder(6)")]
         private string _storyline = null!;
 
         #endregion

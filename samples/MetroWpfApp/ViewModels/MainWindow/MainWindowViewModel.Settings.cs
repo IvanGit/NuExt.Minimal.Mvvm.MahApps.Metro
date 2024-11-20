@@ -8,7 +8,7 @@ namespace MetroWpfApp.ViewModels
     {
         #region Properties
 
-        [Notify]
+        [Notify(Setter = AccessModifier.Private)]
         private MainWindowSettings? _settings;
 
         #endregion

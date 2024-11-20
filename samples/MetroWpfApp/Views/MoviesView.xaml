@@ -6,8 +6,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:minimal="http://schemas.minimalmvvm.com/winfx/xaml/mvvm"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="clr-namespace:MetroWpfApp"
              xmlns:viewModels="clr-namespace:MetroWpfApp.ViewModels"
-             xmlns:models="clr-namespace:MetroWpfApp.Models"
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance {x:Type viewModels:MoviesViewModel}, IsDesignTimeCreatable=True}"
              d:DesignHeight="450" d:DesignWidth="800">
@@ -47,20 +47,20 @@
                     <Setter Property="ToolTipService.ShowOnDisabled" Value="True"/>
                 </Style>
             </StackPanel.Resources>
-            <Button Command="{Binding NewGroupCommand}" ToolTip="New Group">
+            <Button Command="{Binding NewGroupCommand}" ToolTip="{x:Static local:Loc.New_Group}">
                 <iconPacks:PackIconMaterial Kind="FolderPlus" />
             </Button>
-            <Button Command="{Binding NewMovieCommand}" ToolTip="New Movie">
+            <Button Command="{Binding NewMovieCommand}" ToolTip="{x:Static local:Loc.New_Movie}">
                 <iconPacks:PackIconMaterial Kind="MoviePlus" />
             </Button>
-            <Button Command="{Binding EditCommand}" ToolTip="Edit">
+            <Button Command="{Binding EditCommand}" ToolTip="{x:Static local:Loc.Edit}">
                 <iconPacks:PackIconMaterial Kind="Rename" />
             </Button>
-            <Button Command="{Binding DeleteCommand}" ToolTip="Delete">
+            <Button Command="{Binding DeleteCommand}" ToolTip="{x:Static local:Loc.Delete}">
                 <iconPacks:PackIconMaterial Kind="Delete" />
             </Button>
             <Separator/>
-            <Button Command="{Binding OpenMovieCommand}" CommandParameter="{Binding SelectedItem, ElementName=MoviesTree}" ToolTip="Open Movie">
+            <Button Command="{Binding OpenMovieCommand}" CommandParameter="{Binding SelectedItem, ElementName=MoviesTree}" ToolTip="{x:Static local:Loc.Open_Movie}">
                 <iconPacks:PackIconMaterial Kind="MovieOpen" />
             </Button>
         </StackPanel>
@@ -85,13 +85,13 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 <Border Grid.Column="0" BorderThickness="1,1,0,0">
-                    <TextBlock Text="Title"/>
+                    <TextBlock Text="{x:Static local:Loc.Title}"/>
                 </Border>
                 <Border Grid.Column="1" BorderThickness="1,1,0,0">
-                    <TextBlock Text="Release Date"/>
+                    <TextBlock Text="{x:Static local:Loc.Release_Date}"/>
                 </Border>
                 <Border Grid.Column="2" BorderThickness="1,1,0,0">
-                    <TextBlock Text="Director"/>
+                    <TextBlock Text="{x:Static local:Loc.Director}"/>
                 </Border>
                 <Border Grid.Column="3" BorderThickness="0,1,1,0">
                     <Rectangle Width="{Binding Path=(minimal:ScrollBarVisibilityBehavior.VerticalScrollBarActualWidth), ElementName=MoviesTree}"/>
@@ -99,10 +99,10 @@
             </Grid>
 
             <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal">
-                <Button Margin="2" Content="Expand All" Command="{Binding ExpandCollapseCommand}" CommandParameter="{x:Static mah:BooleanBoxes.TrueBox}"/>
-                <Button Margin="2" Content="Collapse All" Command="{Binding ExpandCollapseCommand}" CommandParameter="{x:Static mah:BooleanBoxes.FalseBox}"/>
+                <Button Margin="2" Content="{x:Static local:Loc.Expand_All}" Command="{Binding ExpandOrCollapseCommand}" CommandParameter="{x:Static mah:BooleanBoxes.TrueBox}"/>
+                <Button Margin="2" Content="{x:Static local:Loc.Collapse_All}" Command="{Binding ExpandOrCollapseCommand}" CommandParameter="{x:Static mah:BooleanBoxes.FalseBox}"/>
                 <TextBlock Margin="5,0" VerticalAlignment="Center" 
-                           Text="You can move items by drag'n'drop between groups with mouse"/>
+                           Text="{x:Static local:Loc.You_can_move_items_by_drag_n_drop_between_groups_with_mouse}"/>
             </StackPanel>
 
             <TreeView x:Name="MoviesTree" BorderThickness="1" AllowDrop="True"

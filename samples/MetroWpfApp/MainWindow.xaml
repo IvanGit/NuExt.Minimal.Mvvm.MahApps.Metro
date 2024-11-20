@@ -78,6 +78,5 @@
                 <TextBlock Text="{Binding Source={StaticResource AppBindingProxy}, Path=DataContext.PerformanceMonitor.FormattedUsage, FallbackValue={x:Null}}" />
             </StatusBarItem>
         </StatusBar>
-
     </Grid>
 </mah:MetroWindow>
