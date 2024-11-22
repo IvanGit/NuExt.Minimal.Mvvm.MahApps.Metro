@@ -141,7 +141,6 @@ namespace MetroWpfApp
             PresentationTraceSources.DataBindingSource.Listeners.Add(new BindingErrorTraceListener());
 
             EnvironmentService = new EnvironmentService(AppDomain.CurrentDomain.BaseDirectory, e.Args);
-            //ServiceContainer.RegisterService(new OpenWindowsService());
             _lifetime.AddAsyncDisposable(OpenWindowsService!);
 
             var configuration = BuildConfiguration(EnvironmentService);

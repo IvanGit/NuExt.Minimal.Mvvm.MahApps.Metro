@@ -125,7 +125,7 @@ namespace MetroWpfApp.Services
                 AddUniquePersons(movie.Directors);
                 AddUniquePersons(movie.Writers);
             }
-            Persons.Sort((x, y) =>  string.Compare(x.Name, y.Name, StringComparison.Ordinal));
+            Persons.Sort((x, y) => string.Compare(x.Name, y.Name, StringComparison.Ordinal));
 
             //var s = JsonSerializer.Serialize(movies, options);
             //File.WriteAllText(SourceFilePath, s);

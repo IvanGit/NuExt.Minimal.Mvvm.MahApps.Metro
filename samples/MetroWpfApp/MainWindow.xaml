@@ -6,6 +6,7 @@
                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                  xmlns:minimal="http://schemas.minimalmvvm.com/winfx/xaml/mvvm"
                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                 xmlns:local="clr-namespace:MetroWpfApp"
                  xmlns:viewModels="clr-namespace:MetroWpfApp.ViewModels"
                  xmlns:views="clr-namespace:MetroWpfApp.Views"
                  mc:Ignorable="d"
@@ -16,7 +17,7 @@
                  TitleCharacterCasing="Normal"
                  WindowStartupLocation="CenterScreen"
                  WindowTransitionsEnabled="False"
-                 Title="{Binding Title, TargetNullValue='Untitled'}" Height="450" Width="800" MinHeight="450" MinWidth="800">
+                 Title="{Binding Title, TargetNullValue={x:Static local:Loc.Untitled}}" Height="450" Width="800" MinHeight="450" MinWidth="800">
     <mah:MetroWindow.IconTemplate>
         <DataTemplate>
             <iconPacks:PackIconMaterial Kind="VideoVintage" Margin="4" Width="30" Height="30" 
@@ -69,7 +70,8 @@
         <StatusBar Grid.Row="2">
             <StatusBarItem>
                 <TextBlock>
-                    <Run Text="Documents Opened:"/>
+                    <Run Text="{x:Static local:Loc.Documents_Opened}"/>
+                    <Run Text=":"/>
                     <Run Text="{Binding Count, ElementName=Documents, Mode=OneWay}"/>
                 </TextBlock>
             </StatusBarItem>
@@ -78,5 +80,6 @@
                 <TextBlock Text="{Binding Source={StaticResource AppBindingProxy}, Path=DataContext.PerformanceMonitor.FormattedUsage, FallbackValue={x:Null}}" />
             </StatusBarItem>
         </StatusBar>
+
     </Grid>
 </mah:MetroWindow>

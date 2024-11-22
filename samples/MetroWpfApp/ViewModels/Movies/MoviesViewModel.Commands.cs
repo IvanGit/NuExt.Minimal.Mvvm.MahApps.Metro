@@ -9,7 +9,6 @@ namespace MetroWpfApp.ViewModels
 {
     partial class MoviesViewModel
     {
- 
         #region Command Methods
 
         private bool CanDelete() => CanEdit();
@@ -116,6 +115,7 @@ namespace MetroWpfApp.ViewModels
 
             var groupName = await DialogCoordinator!.ShowInputAsync(this, Loc.New_Group_Name,
                 Loc.Enter_new_group_name, dialogSettings);
+
             if (string.IsNullOrWhiteSpace(groupName))
             {
                 return;

@@ -5,7 +5,7 @@ using System.Diagnostics;
 
 namespace MetroWpfApp.ViewModels
 {
-    internal sealed class EditMovieViewModel: ControlViewModel
+    internal sealed class EditMovieViewModel : ControlViewModel
     {
         #region Properties
 
