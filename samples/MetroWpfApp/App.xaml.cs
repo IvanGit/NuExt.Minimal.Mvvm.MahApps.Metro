@@ -146,6 +146,9 @@ namespace MetroWpfApp
             var configuration = BuildConfiguration(EnvironmentService);
             ServiceContainer.RegisterService(configuration);
             ConfigureLogging(EnvironmentService);
+
+            EnvironmentService.LoadLocalization(typeof(Loc), CultureInfo.CurrentUICulture.IetfLanguageTag);
+
             InitializeSettings();
             InitializeAppTheme(configuration);
 
