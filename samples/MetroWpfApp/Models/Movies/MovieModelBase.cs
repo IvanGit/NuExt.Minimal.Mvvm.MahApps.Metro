@@ -1,4 +1,5 @@
 ﻿using Minimal.Mvvm;
+using Minimal.Mvvm.Windows;
 using System.Diagnostics;
 using System.Text.Json.Serialization;
 using System.Windows;
@@ -6,7 +7,7 @@ using System.Windows;
 namespace MetroWpfApp.Models
 {
     [DebuggerDisplay("Name={Name}")]
-    public abstract partial class MovieModelBase: BindableBase, ICloneable<MovieModelBase>, IDragDrop
+    public abstract partial class MovieModelBase : ExpandableBase, ICloneable<MovieModelBase>, IDragDrop
     {
         #region Properties
 
@@ -15,9 +16,6 @@ namespace MetroWpfApp.Models
 
         [JsonIgnore]
         public abstract bool IsEditable { get; }
-
-        [Notify, CustomAttribute("global::System.Text.Json.Serialization.JsonIgnore")]
-        private bool _isExpanded;
 
         [JsonPropertyOrder(0)]
         public abstract MovieKind Kind { get; }

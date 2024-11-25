@@ -29,7 +29,7 @@ namespace MetroWpfApp.Services
 
         #region Properties
 
-        public List<PersonModel> Persons { get; } = new();
+        public List<PersonModel> Persons { get; } = [];
 
         private List<MovieModelBase>? PlainMovieList { get; set; }
 
@@ -90,7 +90,7 @@ namespace MetroWpfApp.Services
 
             cancellationToken.ThrowIfCancellationRequested();
 
-            var rootGroup = new MovieGroupModel() { IsRoot = true, Name = "Movies" };
+            var rootGroup = new MovieGroupModel() { IsRoot = true, Name = Loc.Movies };
             var list = new List<MovieModelBase>() { rootGroup };
 
             var lookup = PlainMovieList!.ToLookup(x => x.Parent);
@@ -105,7 +105,7 @@ namespace MetroWpfApp.Services
                     LookupItems(lookup, group.Items, group, processedItems);
                 }
                 lostItems = lostItems.Except(processedItems).ToList();
-                var lostGroup = new MovieGroupModel() { IsRoot = true, IsLost = true, Name = "Lost" };
+                var lostGroup = new MovieGroupModel() { IsRoot = true, IsLost = true, Name = Loc.Lost };
                 lostItems.ForEach(lostGroup.Items.Add);
                 list.Add(lostGroup);
             }

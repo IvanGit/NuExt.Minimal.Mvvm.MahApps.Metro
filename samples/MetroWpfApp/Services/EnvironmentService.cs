@@ -36,5 +36,4 @@ namespace MetroWpfApp.Services
             }
         }
     }
-
 }
