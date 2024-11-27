@@ -20,8 +20,9 @@ namespace MetroWpfApp.ViewModels
 
             var dialogSettings = new MetroDialogSettings
             {
-                CancellationToken = cancellationToken,
-                DefaultText = SelectedItem?.Name ?? string.Empty,
+                AffirmativeButtonText = Loc.Yes,
+                NegativeButtonText = Loc.No,
+                CancellationToken = cancellationToken
             };
 
             var dialogResult = await DialogCoordinator!.ShowMessageAsync(this, Loc.Confirmation,
@@ -65,10 +66,12 @@ namespace MetroWpfApp.ViewModels
                 case MovieGroupModel group:
                     var dialogSettings = new MetroDialogSettings
                     {
+                        AffirmativeButtonText = Loc.OK,
+                        NegativeButtonText = Loc.Cancel,
                         CancellationToken = cancellationToken,
                         DefaultText = group.Name,
                     };
-                    var groupName = await DialogCoordinator!.ShowInputAsync(this, Loc.Edit_Group_Name,
+                    var groupName = await DialogCoordinator!.ShowInputAsync(this, Loc.Edit_Group,
                         Loc.Enter_new_group_name, dialogSettings);
                     if (string.IsNullOrWhiteSpace(groupName))
                     {
@@ -111,9 +114,15 @@ namespace MetroWpfApp.ViewModels
         {
             var cancellationToken = GetCurrentCancellationToken();
 
-            var dialogSettings = new MetroDialogSettings { CancellationToken = cancellationToken };
+            var dialogSettings = new MetroDialogSettings 
+            {
+                AffirmativeButtonText = Loc.OK,
+                NegativeButtonText = Loc.Cancel,
+                CancellationToken = cancellationToken,
+                DefaultText = Loc.New_Group
+            };
 
-            var groupName = await DialogCoordinator!.ShowInputAsync(this, Loc.New_Group_Name,
+            var groupName = await DialogCoordinator!.ShowInputAsync(this, Loc.New_Group,
                 Loc.Enter_new_group_name, dialogSettings);
 
             if (string.IsNullOrWhiteSpace(groupName))

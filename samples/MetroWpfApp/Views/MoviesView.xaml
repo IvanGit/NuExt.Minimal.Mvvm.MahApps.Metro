@@ -69,10 +69,10 @@
         <DockPanel Grid.IsSharedSizeScope="True">
             <Grid DockPanel.Dock="Top">
                 <Grid.Resources>
-                    <Style TargetType="Border">
+                    <Style TargetType="{x:Type Border}">
                         <Setter Property="BorderBrush" Value="{DynamicResource MahApps.Brushes.ThemeForeground}"/>
                     </Style>
-                    <Style TargetType="TextBlock">
+                    <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
                         <Setter Property="FontWeight" Value="Bold"/>
                         <Setter Property="Margin" Value="5,0"/>
                         <Setter Property="VerticalAlignment" Value="Center"/>
