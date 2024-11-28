@@ -31,7 +31,7 @@
                  x:Name="MovieNameTextBox" 
                  mah:ControlsHelper.FocusBorderBrush="{DynamicResource MahApps.Brushes.Accent}"
                  mah:TextBoxHelper.SelectAllOnFocus="True"
-                 Text="{Binding Movie.Name, UpdateSourceTrigger=PropertyChanged}"
+                 Text="{Binding Movie.Name, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
                  TextWrapping="Wrap" FontSize="15">
             <minimal:Interaction.Behaviors>
                 <minimal:FocusBehavior />
@@ -40,7 +40,7 @@
 
         <Label Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" Content="{x:Static local:Loc.Release_Date}" />
         <DatePicker Grid.Column="1" Grid.Row="1" Margin="5" mah:TextBoxHelper.AutoWatermark="True" FontSize="15"
-                    SelectedDate="{Binding Movie.ReleaseDate}" />
+                    SelectedDate="{Binding Movie.ReleaseDate, ValidatesOnDataErrors=True}" />
 
         <Label Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" Content="{x:Static local:Loc.Directors}" />
         <mah:MultiSelectionComboBox Grid.Column="1" Grid.Row="2" Margin="5"
@@ -56,7 +56,6 @@
 
         <Label Grid.Column="0" Grid.Row="4" VerticalAlignment="Center" Content="{x:Static local:Loc.Description}" />
         <TextBox Grid.Column="1" Grid.Row="4" Margin="5" TextWrapping="Wrap" 
-                 AcceptsReturn="True" VerticalScrollBarVisibility="Auto"
                  Text="{Binding Movie.Description}" FontSize="15"/>
 
         <Label Grid.Column="0" Grid.Row="5" VerticalAlignment="Center" Content="{x:Static local:Loc.Storyline}" />

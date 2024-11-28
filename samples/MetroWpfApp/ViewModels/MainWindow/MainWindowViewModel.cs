@@ -119,13 +119,19 @@ namespace MetroWpfApp.ViewModels
             MessageBox.Show(string.Format(Loc.An_error_has_occurred_in_Arg0_Arg1, callerName, ex.Message), Loc.Error, MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
-        protected override async Task OnInitializeAsync(CancellationToken cancellationToken)
+        protected override Task OnInitializeAsync(CancellationToken cancellationToken)
         {
+            Debug.Assert(DocumentManagerService != null, $"{nameof(DocumentManagerService)} is null");
             Debug.Assert(EnvironmentService != null, $"{nameof(EnvironmentService)} is null");
             Debug.Assert(MoviesService != null, $"{nameof(MoviesService)} is null");
+            Debug.Assert(SettingsService != null, $"{nameof(SettingsService)} is null");
 
-            await base.OnInitializeAsync(cancellationToken);
-            await LoadMenuAsync(cancellationToken);
+            if (DocumentManagerService is IAsyncDisposable asyncDisposable)
+            {
+                Lifetime.AddAsyncDisposable(asyncDisposable);
+            }
+
+            return base.OnInitializeAsync(cancellationToken);
         }
 
         public async ValueTask OpenMovieAsync(MovieModel movie, CancellationToken cancellationToken)
