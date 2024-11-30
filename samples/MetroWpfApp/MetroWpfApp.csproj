@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup Condition="'$(UseNuExtPackages)' == 'true'">
-    <PackageReference Include="NuExt.Minimal.Mvvm.SourceGenerator" Version="0.2.4" PrivateAssets="all" />
+    <PackageReference Include="NuExt.Minimal.Mvvm.SourceGenerator" Version="0.2.6" PrivateAssets="all" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(UseNuExtPackages)' == 'false'">

@@ -24,6 +24,12 @@ namespace MahApps.Metro.Controls.Dialogs
         public static readonly DependencyProperty ValidatesOnDataErrorsProperty = DependencyProperty.Register(
             nameof(ValidatesOnDataErrors), typeof(bool), typeof(MetroDialog), new PropertyMetadata(false));
 
+        /// <summary>
+        /// Identifies the <see cref="ValidatesOnNotifyDataErrors"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty ValidatesOnNotifyDataErrorsProperty = DependencyProperty.Register(
+            nameof(ValidatesOnNotifyDataErrors), typeof(bool), typeof(MetroDialog), new PropertyMetadata(false));
+
         #endregion
 
         private readonly TaskCompletionSource<UICommand?> _tcs = new(TaskCreationOptions.RunContinuationsAsynchronously);
@@ -75,6 +81,17 @@ namespace MahApps.Metro.Controls.Dialogs
             set => SetValue(ValidatesOnDataErrorsProperty, value);
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether the dialog should check for validation errors
+        /// when closing. If true, the dialog will prevent closing if there are validation errors.
+        /// This applies only if the ViewModel implements the <see cref="INotifyDataErrorInfo"/> interface.
+        /// </summary>
+        public bool ValidatesOnNotifyDataErrors
+        {
+            get => (bool)GetValue(ValidatesOnNotifyDataErrorsProperty);
+            set => SetValue(ValidatesOnNotifyDataErrorsProperty, value);
+        }
+
         #endregion
 
         #region Event Handlers
@@ -122,16 +139,17 @@ namespace MahApps.Metro.Controls.Dialogs
 
         private bool HasValidationErrors()
         {
-            if (!ValidatesOnDataErrors)
+            if (!ValidatesOnDataErrors && !ValidatesOnNotifyDataErrors)
             {
                 return false;
             }
             var viewModel = ViewModelHelper.GetViewModelFromView(Content);
-            if (viewModel is not IDataErrorInfo errorInfo)
+            return viewModel switch
             {
-                return false;
-            }
-            return !string.IsNullOrEmpty(errorInfo.Error);
+                IDataErrorInfo dataErrorInfo when ValidatesOnDataErrors && !string.IsNullOrEmpty(dataErrorInfo.Error) => true,
+                INotifyDataErrorInfo notifyDataErrorInfo when ValidatesOnNotifyDataErrors && notifyDataErrorInfo.HasErrors => true,
+                _ => false
+            };
         }
 
         private Lifetime SubscribeMetroDialog()

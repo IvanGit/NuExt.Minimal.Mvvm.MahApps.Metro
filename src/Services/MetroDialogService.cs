@@ -25,6 +25,12 @@ namespace Minimal.Mvvm.Windows
         public static readonly DependencyProperty ValidatesOnDataErrorsProperty = DependencyProperty.Register(
             nameof(ValidatesOnDataErrors), typeof(bool), typeof(MetroDialogService), new PropertyMetadata(false));
 
+        /// <summary>
+        /// Identifies the <see cref="ValidatesOnNotifyDataErrors"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty ValidatesOnNotifyDataErrorsProperty = DependencyProperty.Register(
+            nameof(ValidatesOnNotifyDataErrors), typeof(bool), typeof(MetroDialogService), new PropertyMetadata(false));
+
         #endregion
 
         #region Properties
@@ -47,6 +53,17 @@ namespace Minimal.Mvvm.Windows
         {
             get => (bool)GetValue(ValidatesOnDataErrorsProperty);
             set => SetValue(ValidatesOnDataErrorsProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the dialog should check for validation errors
+        /// when closing. If true, the dialog will prevent closing if there are validation errors.
+        /// This applies only if the ViewModel implements the <see cref="INotifyDataErrorInfo"/> interface.
+        /// </summary>
+        public bool ValidatesOnNotifyDataErrors
+        {
+            get => (bool)GetValue(ValidatesOnNotifyDataErrorsProperty);
+            set => SetValue(ValidatesOnNotifyDataErrorsProperty, value);
         }
 
         #endregion
@@ -77,7 +94,8 @@ namespace Minimal.Mvvm.Windows
                 Title = title,
                 Content = view,
                 CommandsSource = dialogCommands,
-                ValidatesOnDataErrors = ValidatesOnDataErrors
+                ValidatesOnDataErrors = ValidatesOnDataErrors,
+                ValidatesOnNotifyDataErrors = ValidatesOnNotifyDataErrors
             };
 
             var dialogCoordinator = DialogCoordinator ?? MahApps.Metro.Controls.Dialogs.DialogCoordinator.Instance;
