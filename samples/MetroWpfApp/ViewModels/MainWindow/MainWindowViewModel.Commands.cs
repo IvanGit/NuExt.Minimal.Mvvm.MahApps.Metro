@@ -144,7 +144,7 @@ namespace MetroWpfApp.ViewModels
         {
             var doc = DocumentManagerService!.FindDocumentById(new MovieDocument(movie));
             if (doc == null) return;
-            await doc.CloseAsync();
+            await doc.CloseAsync().ConfigureAwait(false);
         }
 
         #endregion

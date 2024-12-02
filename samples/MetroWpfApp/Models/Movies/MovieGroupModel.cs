@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace MetroWpfApp.Models
 {
-    public sealed class MovieGroupModel: MovieModelBase
+    public sealed class MovieGroupModel : MovieModelBase
     {
         #region Properties
 

@@ -4,7 +4,7 @@ using System.Diagnostics;
 namespace MetroWpfApp.Models
 {
     [DebuggerDisplay("Name={Name}")]
-    public sealed partial class PersonModel: BindableBase, ICloneable<PersonModel>
+    public sealed partial class PersonModel : BindableBase, ICloneable<PersonModel>
     {
         #region Properties
 
@@ -17,7 +17,7 @@ namespace MetroWpfApp.Models
 
         public PersonModel Clone()
         {
-            return new PersonModel() { Name = Name};
+            return new PersonModel() { Name = Name };
         }
 
         object ICloneable.Clone()

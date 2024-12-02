@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace MetroWpfApp.Converters
 {
-    public sealed class JsonMovieReleaseDateConverter: JsonConverter<DateTime>
+    public sealed class JsonMovieReleaseDateConverter : JsonConverter<DateTime>
     {
         private const string DateFormat = "yyyy.MM.dd";
 
