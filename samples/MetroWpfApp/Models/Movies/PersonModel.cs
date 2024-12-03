@@ -1,7 +1,7 @@
 ﻿using Minimal.Mvvm;
 using System.Diagnostics;
 
-namespace MetroWpfApp.Models
+namespace MovieWpfApp.Models
 {
     [DebuggerDisplay("Name={Name}")]
     public sealed partial class PersonModel : BindableBase, ICloneable<PersonModel>

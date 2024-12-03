@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.Text;
 using System.Text.Json.Serialization;
 
-namespace MetroWpfApp.Models
+namespace MovieWpfApp.Models
 {
     public sealed partial class MovieModel : MovieModelBase, IDataErrorInfo
     {
@@ -29,7 +29,7 @@ namespace MetroWpfApp.Models
         public ObservableCollection<PersonModel> Writers { get; set; } = [];
 
         [Notify, CustomAttribute("global::System.Text.Json.Serialization.JsonPropertyOrder(4)")]
-        [CustomAttribute("global::System.Text.Json.Serialization.JsonConverter(typeof(MetroWpfApp.Converters.JsonMovieReleaseDateConverter))")]
+        [CustomAttribute("global::System.Text.Json.Serialization.JsonConverter(typeof(MovieWpfApp.Converters.JsonMovieReleaseDateConverter))")]
         private DateTime _releaseDate;
 
         [Notify, CustomAttribute("global::System.Text.Json.Serialization.JsonPropertyOrder(5)")]

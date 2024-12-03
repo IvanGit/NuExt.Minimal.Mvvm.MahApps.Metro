@@ -1,9 +1,9 @@
-﻿using System.Collections.ObjectModel;
-using MetroWpfApp.Models;
+﻿using MovieWpfApp.Models;
+using System.Collections.ObjectModel;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace MetroWpfApp.Converters
+namespace MovieWpfApp.Converters
 {
     internal sealed class MovieModelBaseConverter : JsonConverter<MovieModelBase>
     {

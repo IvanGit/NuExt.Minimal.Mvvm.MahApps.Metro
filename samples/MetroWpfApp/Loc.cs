@@ -1,6 +1,6 @@
 ﻿using Minimal.Mvvm;
 
-namespace MetroWpfApp
+namespace MovieWpfApp
 {
     /// <summary>
     /// Localization

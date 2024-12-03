@@ -1,8 +1,8 @@
-﻿using MetroWpfApp.Models;
-using Minimal.Mvvm;
+﻿using Minimal.Mvvm;
+using MovieWpfApp.Models;
 using System.Diagnostics;
 
-namespace MetroWpfApp.ViewModels
+namespace MovieWpfApp.ViewModels
 {
     partial class MoviesViewModel
     {

@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35222.181
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetroWpfApp", "samples\MetroWpfApp\MetroWpfApp.csproj", "{BAAEED79-9B88-4694-9272-5CE36EF4F4AE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MovieWpfApp", "samples\MetroWpfApp\MovieWpfApp.csproj", "{BAAEED79-9B88-4694-9272-5CE36EF4F4AE}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NuExt.Minimal.Mvvm.MahApps.Metro", "src\NuExt.Minimal.Mvvm.MahApps.Metro.csproj", "{05D56E07-62E8-4EC6-A125-9B5E91743B0A}"
 EndProject

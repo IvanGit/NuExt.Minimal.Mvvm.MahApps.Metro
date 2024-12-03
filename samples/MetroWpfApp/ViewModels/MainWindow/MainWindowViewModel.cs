@@ -1,9 +1,9 @@
 ﻿using ControlzEx.Theming;
-using MetroWpfApp.Models;
-using MetroWpfApp.Services;
-using MetroWpfApp.Views;
+using MahApps.Metro.Controls.Dialogs;
+using Microsoft.Extensions.Logging;
 using Minimal.Mvvm;
 using Minimal.Mvvm.Windows;
+using MovieWpfApp.Services;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Reflection;
@@ -12,7 +12,7 @@ using System.Text;
 using System.Windows;
 using System.Windows.Media;
 
-namespace MetroWpfApp.ViewModels
+namespace MovieWpfApp.ViewModels
 {
     internal sealed partial class MainWindowViewModel : WindowViewModel
     {
@@ -27,9 +27,13 @@ namespace MetroWpfApp.ViewModels
 
         #region Services
 
+        private IDialogCoordinator? DialogCoordinator => GetService<IDialogCoordinator>();
+
         public IAsyncDocumentManagerService? DocumentManagerService => GetService<IAsyncDocumentManagerService>("Documents");
 
         public EnvironmentService EnvironmentService => GetService<EnvironmentService>()!;
+
+        public ILogger Logger => GetService<ILogger>()!;
 
         private MoviesService MoviesService => GetService<MoviesService>()!;
 
@@ -105,16 +109,35 @@ namespace MetroWpfApp.ViewModels
             await base.OnDisposeAsync();
         }
 
-        protected override void OnError(Exception ex, [CallerMemberName] string? callerName = null)
+        protected override async void OnError(Exception ex, [CallerMemberName] string? callerName = null)
         {
             base.OnError(ex, callerName);
-            MessageBox.Show(string.Format(Loc.An_error_has_occurred_in_Arg0_Arg1, callerName, ex.Message), Loc.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+#pragma warning disable IDE0079
+#pragma warning disable CA2254
+            Logger.LogError(ex, Loc.An_error_has_occurred_in__Caller____Exception_, callerName, ex.Message);
+#pragma warning restore CA2254
+#pragma warning restore IDE0079
+            if (DialogCoordinator == null)
+            {
+                MessageBox.Show(string.Format(Loc.An_error_has_occurred_in_Arg0_Arg1, callerName, ex.Message), Loc.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            else
+            {
+                var dialogSettings = new MetroDialogSettings
+                {
+                    AffirmativeButtonText = Loc.OK,
+                    CancellationToken = CancellationTokenSource.Token,
+                };
+                await DialogCoordinator.ShowMessageAsync(this, Loc.Error, string.Format(Loc.An_error_has_occurred_in_Arg0_Arg1, callerName, ex.Message), MessageDialogStyle.Affirmative, dialogSettings).ConfigureAwait(false);
+            }
         }
 
         protected override Task OnInitializeAsync(CancellationToken cancellationToken)
         {
+            Debug.Assert(DialogCoordinator != null, $"{nameof(DialogCoordinator)} is null");
             Debug.Assert(DocumentManagerService != null, $"{nameof(DocumentManagerService)} is null");
             Debug.Assert(EnvironmentService != null, $"{nameof(EnvironmentService)} is null");
+            Debug.Assert(Logger != null, $"{nameof(Logger)} is null");
             Debug.Assert(MoviesService != null, $"{nameof(MoviesService)} is null");
             Debug.Assert(SettingsService != null, $"{nameof(SettingsService)} is null");
 

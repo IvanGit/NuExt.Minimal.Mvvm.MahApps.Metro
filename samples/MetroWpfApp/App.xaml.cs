@@ -1,10 +1,10 @@
-﻿using MetroWpfApp.Models;
-using MetroWpfApp.Services;
-using MetroWpfApp.ViewModels;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Minimal.Mvvm;
 using Minimal.Mvvm.Windows;
+using MovieWpfApp.Models;
+using MovieWpfApp.Services;
+using MovieWpfApp.ViewModels;
 using NLog;
 using NLog.Extensions.Logging;
 using System.ComponentModel;
@@ -17,7 +17,7 @@ using System.Windows.Threading;
 using ILogger = Microsoft.Extensions.Logging.ILogger;
 using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 
-namespace MetroWpfApp
+namespace MovieWpfApp
 {
     /// <summary>
     /// Interaction logic for App.xaml

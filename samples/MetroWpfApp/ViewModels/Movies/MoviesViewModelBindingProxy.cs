@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace MetroWpfApp.ViewModels
+namespace MovieWpfApp.ViewModels
 {
     internal sealed class MoviesViewModelBindingProxy : BindingProxy<MoviesViewModel>
     {

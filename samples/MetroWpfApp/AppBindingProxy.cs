@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace MetroWpfApp
+namespace MovieWpfApp
 {
     public sealed class AppBindingProxy : BindingProxy<App>
     {

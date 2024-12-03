@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace MetroWpfApp.Converters
+namespace MovieWpfApp.Converters
 {
     public sealed class JsonMovieReleaseDateConverter : JsonConverter<DateTime>
     {

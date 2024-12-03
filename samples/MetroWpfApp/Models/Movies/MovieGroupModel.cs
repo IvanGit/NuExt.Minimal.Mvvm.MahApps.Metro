@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Text.Json.Serialization;
 
-namespace MetroWpfApp.Models
+namespace MovieWpfApp.Models
 {
     public sealed class MovieGroupModel : MovieModelBase
     {
@@ -29,30 +29,7 @@ namespace MetroWpfApp.Models
 
         #region Methods
 
-        public override MovieModelBase Clone()
-        {
-            return new MovieGroupModel() { Name = Name, Parent = Parent };
-        }
-
-        public void CollapseAll()
-        {
-            Collapse();
-            Items.OfType<MovieGroupModel>().ForEach(item => item.CollapseAll());
-        }
-
-        public override void Expand()
-        {
-            Parent?.Expand();
-            base.Expand();
-        }
-
-        public void ExpandAll()
-        {
-            Expand();
-            Items.OfType<MovieGroupModel>().ForEach(item => item.ExpandAll());
-        }
-
-        protected override bool OnCanDrop(MovieModelBase model)
+        protected override bool CanDrop(MovieModelBase model)
         {
             if (IsLost)
             {
@@ -74,7 +51,7 @@ namespace MetroWpfApp.Models
             return true;
         }
 
-        protected override bool OnDrop(MovieModelBase model)
+        protected override bool Drop(MovieModelBase model)
         {
             model.Parent?.Items.Remove(model);
             if (IsRoot == false)
@@ -87,6 +64,29 @@ namespace MetroWpfApp.Models
                 model.Parent = null;
             }
             return true;
+        }
+
+        public override MovieModelBase Clone()
+        {
+            return new MovieGroupModel() { Name = Name, Parent = Parent };
+        }
+
+        public void CollapseAll()
+        {
+            Collapse();
+            Items.OfType<MovieGroupModel>().ForEach(item => item.CollapseAll());
+        }
+
+        public override void Expand()
+        {
+            Parent?.Expand();
+            base.Expand();
+        }
+
+        public void ExpandAll()
+        {
+            Expand();
+            Items.OfType<MovieGroupModel>().ForEach(item => item.ExpandAll());
         }
 
         public override void UpdateFrom(MovieModelBase clone)

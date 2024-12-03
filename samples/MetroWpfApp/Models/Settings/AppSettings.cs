@@ -1,6 +1,6 @@
 ﻿using Minimal.Mvvm;
 
-namespace MetroWpfApp.Models
+namespace MovieWpfApp.Models
 {
     public sealed partial class AppSettings : SettingsBase
     {

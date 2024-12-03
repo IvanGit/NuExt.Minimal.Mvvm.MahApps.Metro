@@ -1,6 +1,6 @@
-﻿using MetroWpfApp.Models;
+﻿using MovieWpfApp.Models;
 
-namespace MetroWpfApp;
+namespace MovieWpfApp;
 
 public readonly record struct Movies();
 public readonly record struct MovieDocument(MovieModel Movie);

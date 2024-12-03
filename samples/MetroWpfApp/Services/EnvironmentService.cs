@@ -5,7 +5,7 @@ using System.IO;
 using System.Text;
 using System.Text.Json;
 
-namespace MetroWpfApp.Services
+namespace MovieWpfApp.Services
 {
     public sealed class EnvironmentService(string baseDirectory, params string[] args)
         : EnvironmentServiceBase(baseDirectory, Path.Combine(baseDirectory, "AppData"), args);

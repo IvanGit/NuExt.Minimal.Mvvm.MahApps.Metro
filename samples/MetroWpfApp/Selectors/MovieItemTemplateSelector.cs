@@ -1,9 +1,9 @@
-﻿using MetroWpfApp.Models;
+﻿using MovieWpfApp.Models;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace MetroWpfApp.Selectors
+namespace MovieWpfApp.Selectors
 {
     public sealed class MovieItemTemplateSelector : DataTemplateSelector
     {
