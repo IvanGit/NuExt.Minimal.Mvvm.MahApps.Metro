@@ -14,7 +14,7 @@ Minimal.Mvvm.Windows.DialogCoordinatorService
 Minimal.Mvvm.Windows.MetroDialogService
 Minimal.Mvvm.Windows.MetroTabbedDocumentService
 MahApps.Metro.Controls.Dialogs.MetroDialog</Description>
-    <Version>0.2.8-pre</Version>
+    <Version>0.2.9-pre</Version>
     <RootNamespace>Minimal.Mvvm.Windows</RootNamespace>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);1591</NoWarn>

@@ -30,6 +30,8 @@
         <minimal:DialogCoordinatorService x:Name="DialogCoordinatorService"/>
         <minimal:MetroDialogService DialogCoordinator="{Binding Source={x:Reference DialogCoordinatorService}}"
                                     MessageBoxButtonLocalizer="{StaticResource MessageBoxButtonLocalizer}"
+                                    DialogContentMargin="*"
+                                    DialogContentWidth="8*"
                                     ValidatesOnDataErrors="True"/>
         <minimal:EventTrigger EventName="Closing" Command="{Binding ClosingCommand}" PassEventArgsToCommand="True" />
         <minimal:EventTrigger EventName="ContentRendered" Command="{Binding ContentRenderedCommand}"/>
