@@ -86,11 +86,7 @@ namespace MovieWpfApp.Models
     {
         public static List<MovieModelBase> AsPlainList(this IEnumerable<MovieModelBase> items)
         {
-#if NET6_0_OR_GREATER
-            ArgumentNullException.ThrowIfNull(items);
-#else
             Throw.IfNull(items);
-#endif
             var list = new List<MovieModelBase>();
             ProcessList(list, items);
             return list;
@@ -110,11 +106,7 @@ namespace MovieWpfApp.Models
 
         public static MovieModelBase? FindByPath(this ICollection<MovieModelBase> items, string? path)
         {
-#if NET6_0_OR_GREATER
-            ArgumentNullException.ThrowIfNull(items);
-#else
             Throw.IfNull(items);
-#endif
             if (string.IsNullOrEmpty(path))
             {
                 return null;

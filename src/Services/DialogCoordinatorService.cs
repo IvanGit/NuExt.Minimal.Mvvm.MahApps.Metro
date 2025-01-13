@@ -159,7 +159,7 @@ namespace Minimal.Mvvm.Windows
         /// <exception cref="ArgumentNullException">Thrown when the context is null.</exception>
         private MetroWindow GetMetroWindow(object context)
         {
-#if NET6_0_OR_GREATER
+#if NET
             ArgumentNullException.ThrowIfNull(context);
 #else
             Throw.IfNull(context);
