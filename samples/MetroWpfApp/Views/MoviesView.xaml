@@ -64,6 +64,9 @@
             <Button Command="{Binding OpenMovieCommand}" CommandParameter="{Binding SelectedItem, ElementName=MoviesTree}" ToolTip="{x:Static local:Loc.Open_Movie}">
                 <iconPacks:PackIconMaterial Kind="MovieOpen" />
             </Button>
+            <Button Command="{Binding OpenMovieExternalCommand}" CommandParameter="{Binding SelectedItem, ElementName=MoviesTree}" ToolTip="{x:Static local:Loc.Open_Movie_In_Window}">
+                <iconPacks:PackIconMaterial Kind="MovieOpenOutline" />
+            </Button>
         </StackPanel>
 
         <DockPanel Grid.IsSharedSizeScope="True">

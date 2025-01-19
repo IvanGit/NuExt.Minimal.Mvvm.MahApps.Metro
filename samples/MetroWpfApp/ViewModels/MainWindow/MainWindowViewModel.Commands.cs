@@ -17,24 +17,30 @@ namespace MovieWpfApp.ViewModels
         [Notify(Setter = Private)]
         private ICommand? _activeDocumentChangedCommand;
 
+        [Notify(Setter = Private)]
+        private ICommand? _activeWindowChangedCommand;
+
         #endregion
 
         #region Command Methods
 
         private bool CanCloseActiveDocument()
         {
-            return IsUsable && ActiveDocument != null;
+            return IsUsable && _lastActiveDocument != null;
         }
 
         [Notify(Setter = Private)]
         private async Task CloseActiveDocumentAsync()
         {
-            await ActiveDocument!.CloseAsync();
+            if (_lastActiveDocument != null)
+            {
+                await _lastActiveDocument.CloseAsync(false);
+            }
         }
 
         private bool CanShowHideActiveDocument(bool show)
         {
-            return IsUsable && ActiveDocument != null;
+            return IsUsable && _lastActiveDocument != null;
         }
 
         [Notify(Setter = Private)]
@@ -42,17 +48,51 @@ namespace MovieWpfApp.ViewModels
         {
             if (show)
             {
-                ActiveDocument?.Show();
+                _lastActiveDocument?.Show();
+                //ActiveDocument = _lastActiveDocument;
             }
             else
             {
-                ActiveDocument?.Hide();
+                _lastActiveDocument?.Hide();
+            }
+        }
+
+        private bool CanCloseActiveWindow()
+        {
+            return IsUsable && _lastActiveWindow != null;
+        }
+
+        [Notify(Setter = Private)]
+        private async Task CloseActiveWindowAsync()
+        {
+            if (_lastActiveWindow != null)
+            {
+                await _lastActiveWindow.CloseAsync(false);
+            }
+        }
+
+        private bool CanShowHideActiveWindow(bool show)
+        {
+            return IsUsable && _lastActiveWindow != null;
+        }
+
+        [Notify(Setter = Private)]
+        private void ShowHideActiveWindow(bool show)
+        {
+            if (show)
+            {
+                _lastActiveWindow?.Show();
+                //ActiveWindow = _lastActiveWindow;
+            }
+            else
+            {
+                _lastActiveWindow?.Hide();
             }
         }
 
         private bool CanShowMovies()
         {
-            return IsUsable && DocumentManagerService != null;
+            return IsUsable;
         }
 
         [Notify(Setter = Private)]
@@ -110,7 +150,7 @@ namespace MovieWpfApp.ViewModels
 
         private bool CanOpenMovie(MovieModel movie)
         {
-            return IsUsable && DocumentManagerService != null;
+            return IsUsable;
         }
 
         [Notify(Setter = Private)]
@@ -125,6 +165,32 @@ namespace MovieWpfApp.ViewModels
                 {
                     var doc = await x.CreateDocumentAsync(nameof(MovieView), vm, this, movie, cancellationToken);
                     doc.DisposeOnClose = true;
+                    //doc.HideInsteadOfClose = true;
+                    return doc;
+                }
+                catch (Exception ex)
+                {
+                    Debug.Assert(ex is OperationCanceledException, ex.Message);
+                    await vm.DisposeAsync();
+                    throw;
+                }
+            });
+            document.Show();
+        }
+
+        [Notify(Setter = Private)]
+        private async Task OpenMovieExternalAsync(MovieModel movie)
+        {
+            var cancellationToken = GetCurrentCancellationToken();
+
+            var document = await WindowManagerService!.FindDocumentByIdOrCreateAsync(new MovieDocument(movie), async x =>
+            {
+                var vm = new MovieViewModel();
+                try
+                {
+                    var doc = await x.CreateDocumentAsync(nameof(MovieView), vm, this, movie, cancellationToken);
+                    doc.DisposeOnClose = true;
+                    //doc.HideInsteadOfClose = true;
                     return doc;
                 }
                 catch (Exception ex)
@@ -155,12 +221,16 @@ namespace MovieWpfApp.ViewModels
         {
             base.CreateCommands();
             ActiveDocumentChangedCommand = RegisterCommand(UpdateTitle);
+            ActiveWindowChangedCommand = RegisterCommand(UpdateTitle);
             ChangeAccentColorCommand = RegisterCommand<string?>(ChangeAccentColor, CanChangeAccentColor);
             ChangeAppThemeCommand = RegisterCommand<string?>(ChangeAppTheme, CanChangeAppTheme);
             ShowMoviesCommand = RegisterAsyncCommand(ShowMoviesAsync, CanShowMovies);
             ShowHideActiveDocumentCommand = RegisterCommand<bool>(ShowHideActiveDocument, CanShowHideActiveDocument);
+            ShowHideActiveWindowCommand = RegisterCommand<bool>(ShowHideActiveWindow, CanShowHideActiveWindow);
             CloseActiveDocumentCommand = RegisterAsyncCommand(CloseActiveDocumentAsync, CanCloseActiveDocument);
+            CloseActiveWindowCommand = RegisterAsyncCommand(CloseActiveWindowAsync, CanCloseActiveWindow);
             OpenMovieCommand = RegisterAsyncCommand<MovieModel>(OpenMovieAsync, CanOpenMovie);
+            OpenMovieExternalCommand = RegisterAsyncCommand<MovieModel>(OpenMovieExternalAsync, CanOpenMovie);
             CloseMovieCommand = RegisterAsyncCommand<MovieModel>(CloseMovieAsync, CanCloseMovie);
         }
 

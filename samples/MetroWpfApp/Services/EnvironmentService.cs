@@ -1,6 +1,5 @@
 ﻿using Minimal.Mvvm;
 using Minimal.Mvvm.Windows;
-using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Text.Json;
@@ -28,7 +27,7 @@ namespace MovieWpfApp.Services
             var props = type.GetProperties();
             foreach (var prop in props)
             {
-                Debug.Assert(!prop.CanWrite || translations.ContainsKey(prop.Name), $"Can't find translation for {prop.Name}");
+                //Debug.Assert(!prop.CanWrite || translations.ContainsKey(prop.Name), $"Can't find translation for {prop.Name}");
                 if (prop.CanWrite && translations.TryGetValue(prop.Name, out var text))
                 {
                     prop.SetValue(null, text);

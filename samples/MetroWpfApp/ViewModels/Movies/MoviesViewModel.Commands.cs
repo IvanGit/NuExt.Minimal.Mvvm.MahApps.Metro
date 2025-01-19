@@ -182,7 +182,7 @@ namespace MovieWpfApp.ViewModels
 
         private bool CanOpenMovie(MovieModelBase? item)
         {
-            return IsUsable && item is MovieModel && ParentViewModel?.OpenMovieCommand is not null;
+            return IsUsable && item is MovieModel;
         }
 
         [Notify(Setter = Private)]
@@ -190,6 +190,13 @@ namespace MovieWpfApp.ViewModels
         {
             var cancellationToken = GetCurrentCancellationToken();
             await ParentViewModel!.OpenMovieCommand!.ExecuteAsync((item as MovieModel)!, cancellationToken);
+        }
+
+        [Notify(Setter = Private)]
+        private async Task OpenMovieExternalAsync(MovieModelBase? item)
+        {
+            var cancellationToken = GetCurrentCancellationToken();
+            await ParentViewModel!.OpenMovieExternalCommand!.ExecuteAsync((item as MovieModel)!, cancellationToken);
         }
 
         private bool CanMove(MovieModelBase draggedObject)
@@ -235,6 +242,7 @@ namespace MovieWpfApp.ViewModels
             NewMovieCommand = RegisterAsyncCommand(NewMovieAsync, CanNewMovie);
             MoveCommand = RegisterAsyncCommand<MovieModelBase>(MoveAsync, CanMove);
             OpenMovieCommand = RegisterAsyncCommand<MovieModelBase?>(OpenMovieAsync, CanOpenMovie);
+            OpenMovieExternalCommand = RegisterAsyncCommand<MovieModelBase?>(OpenMovieExternalAsync, CanOpenMovie);
             ExpandOrCollapseCommand = RegisterCommand<bool>(ExpandOrCollapse, _ => IsUsable);
         }
 

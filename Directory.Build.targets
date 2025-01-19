@@ -1,6 +1,9 @@
 <Project>
 
   <ItemGroup>
+    <Compile Update="**\*BindingProxy.cs">
+      <DependentUpon>$([System.String]::Copy('%(Filename)').Replace('BindingProxy', '.cs'))</DependentUpon>
+    </Compile>
     <Compile Update="**\*.Commands.cs">
       <DependentUpon>$([System.String]::Copy('%(Filename)').Replace('.Commands', '.cs'))</DependentUpon>
     </Compile>

@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 
 namespace Minimal.Mvvm.Windows
@@ -23,48 +24,60 @@ namespace Minimal.Mvvm.Windows
             private readonly AsyncLifetime _lifetime = new(continueOnCapturedContext: true);
             private bool _isClosing;
 
-            public TabbedDocument(MetroTabbedDocumentService owner, MetroTabItem tab)
+            public TabbedDocument(MetroTabbedDocumentService owner, MetroTabItem tabItem)
             {
                 _ = owner ?? throw new ArgumentNullException(nameof(owner));
-                Tab = tab ?? throw new ArgumentNullException(nameof(tab));
+                TabItem = tabItem ?? throw new ArgumentNullException(nameof(tabItem));
 
+                _lifetime.AddDisposable(CancellationTokenSource);
                 _lifetime.AddBracket(() => owner._documents.Add(this), () => owner._documents.Remove(this));
-                _lifetime.Add(() => TabControl?.Items.Remove(Tab));//second, remove tab item
-                _lifetime.Add(() => Tab.ClearStyle());//first, clear tab item style
+                _lifetime.Add(() => TabControl?.Items.Remove(TabItem));//second, remove tab item
+                _lifetime.Add(() => TabItem.ClearStyle());//first, clear tab item style
+                _lifetime.Add(() => BindingOperations.ClearBinding(TabItem, MetroTabItem.CloseButtonEnabledProperty));
+                _lifetime.AddBracket(
+                    () => ViewModelHelper.SetDataContextBinding(TabItem.Content, FrameworkElement.DataContextProperty, TabItem),
+                    () => ViewModelHelper.ClearDataContextBinding(FrameworkElement.DataContextProperty, TabItem));//third
                 _lifetime.Add(DetachContent);//second, detach content
                 _lifetime.AddAsync(DisposeViewModelAsync);//first, dispose vm
-                _lifetime.AddBracket(() => SetDocument(Tab, this), () => SetDocument(Tab, null));
+                _lifetime.AddBracket(() => SetDocument(TabItem, this), () => SetDocument(TabItem, null));
                 _lifetime.AddBracket(
-                    () => Tab.IsVisibleChanged += OnTabIsVisibleChanged,
-                    () => Tab.IsVisibleChanged -= OnTabIsVisibleChanged);
+                    () => TabItem.IsVisibleChanged += OnTabIsVisibleChanged,
+                    () => TabItem.IsVisibleChanged -= OnTabIsVisibleChanged);
                 _lifetime.AddBracket(
-                    () => ViewModelHelper.SetViewTitleBinding(Tab.Content, HeaderedContentControl.HeaderProperty, Tab),
-                    () => ViewModelHelper.ClearViewTitleBinding(HeaderedContentControl.HeaderProperty, Tab));
+                    () => ViewModelHelper.SetViewTitleBinding(TabItem.Content, HeaderedContentControl.HeaderProperty, TabItem),
+                    () => ViewModelHelper.ClearViewTitleBinding(HeaderedContentControl.HeaderProperty, TabItem));
 
                 var dpd = DependencyPropertyDescriptor.FromProperty(HeaderedContentControl.HeaderProperty, typeof(HeaderedContentControl));
-                Debug.Assert(dpd != null);
                 if (dpd != null)
                 {
                     _lifetime.AddBracket(
-                        () => dpd.AddValueChanged(Tab, OnTabHeaderChanged),
-                        () => dpd.RemoveValueChanged(Tab, OnTabHeaderChanged));
+                        () => dpd.AddValueChanged(TabItem, OnTabHeaderChanged),
+                        () => dpd.RemoveValueChanged(TabItem, OnTabHeaderChanged));
                 }
+                Debug.Assert(dpd != null);
+                Debug.Assert(TabItem.DataContext == ViewModelHelper.GetViewModelFromView(TabItem.Content));
             }
 
             #region Properties
 
+            internal CancellationTokenSource CancellationTokenSource { get; } = new();
+
             public bool DisposeOnClose { get; set; }
+
+            public bool HideInsteadOfClose { get; set; }
 
             public object Id { get; set; } = null!;
 
-            private MetroTabItem Tab { get; }
+            internal bool IsClosing => _isClosing;
 
-            private MetroTabControl? TabControl => Tab.Parent as MetroTabControl;
+            private MetroTabControl? TabControl => TabItem.Parent as MetroTabControl;
+
+            private MetroTabItem TabItem { get; }
 
             public string? Title
             {
-                get => Tab.Header?.ToString();
-                set => Tab.Header = value;
+                get => TabItem.Header?.ToString();
+                set => TabItem.Header = value;
             }
 
             #endregion
@@ -78,9 +91,9 @@ namespace Minimal.Mvvm.Windows
 
             private void OnTabIsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
             {
-                if (Tab.Content is UIElement element)
+                if (TabItem.Content is UIElement element)
                 {
-                    element.Visibility = Tab.Visibility;
+                    element.Visibility = TabItem.Visibility;
                 }
             }
 
@@ -90,11 +103,19 @@ namespace Minimal.Mvvm.Windows
 
             public async ValueTask CloseAsync(bool force = true)
             {
-                if (_isClosing || IsDisposing)
+                if (_lifetime.IsTerminated || IsDisposing)
                 {
                     return;
                 }
-                if (_lifetime.IsTerminated)
+                if (force)
+                {
+#if NET8_0_OR_GREATER
+                    await CancellationTokenSource.CancelAsync();
+#else
+                    CancellationTokenSource.Cancel();
+#endif
+                }
+                if (_isClosing)
                 {
                     return;
                 }
@@ -103,10 +124,18 @@ namespace Minimal.Mvvm.Windows
                     _isClosing = true;
                     if (!force)
                     {
-                        var viewModel = ViewModelHelper.GetViewModelFromView(Tab.Content);
-                        if (viewModel is DocumentContentViewModelBase viewModelBase && viewModelBase.CanClose() == false)
+                        try
                         {
-                            return;
+                            var viewModel = ViewModelHelper.GetViewModelFromView(TabItem.Content);
+                            if (viewModel is IAsyncDocumentContent documentContent && await documentContent.CanCloseAsync(CancellationTokenSource.Token) == false)
+                            {
+                                CancellationTokenSource.Token.ThrowIfCancellationRequested();
+                                return;
+                            }
+                        }
+                        catch (OperationCanceledException) when (CancellationTokenSource.IsCancellationRequested)
+                        {
+                            //do nothing
                         }
                     }
                     CloseTab();
@@ -120,33 +149,34 @@ namespace Minimal.Mvvm.Windows
 
             private void CloseTab()
             {
-                Tab.Visibility = Visibility.Collapsed;
-                if (Tab.CloseTabCommand != null)
+                TabItem.Visibility = Visibility.Collapsed;
+                /*if (TabItem.CloseTabCommand != null)
                 {
-                    if (Tab.CloseTabCommand is RoutedCommand command)
+                    if (TabItem.CloseTabCommand is RoutedCommand command)
                     {
-                        command.Execute(Tab.CloseTabCommandParameter, Tab);
+                        command.Execute(TabItem.CloseTabCommandParameter, TabItem);
                     }
-                    else if (Tab.CloseTabCommand.CanExecute(Tab.CloseTabCommandParameter))
+                    else if (TabItem.CloseTabCommand.CanExecute(TabItem.CloseTabCommandParameter))
                     {
-                        Tab.CloseTabCommand.Execute(Tab.CloseTabCommandParameter);
+                        TabItem.CloseTabCommand.Execute(TabItem.CloseTabCommandParameter);
                     }
-                }
+                }*/
             }
 
             private void DetachContent()
             {
-                var view = Tab.Content;
+                var view = TabItem.Content;
                 Debug.Assert(view != null);
                 //First, detach DataContext from view
                 ViewModelHelper.DetachViewModel(view);
                 //Second, detach Content from tab item
-                Tab.Content = null;
+                TabItem.Content = null;
+                Debug.Assert(TabItem.DataContext == null);
             }
 
             private async ValueTask DisposeViewModelAsync()
             {
-                var viewModel = ViewModelHelper.GetViewModelFromView(Tab.Content);
+                var viewModel = ViewModelHelper.GetViewModelFromView(TabItem.Content);
                 Debug.Assert(viewModel != null);
                 if (DisposeOnClose && viewModel is IAsyncDisposable asyncDisposable)
                 {
@@ -154,26 +184,27 @@ namespace Minimal.Mvvm.Windows
                 }
             }
 
+            public void Hide()
+            {
+                if (TabItem.Visibility != Visibility.Collapsed)
+                {
+                    TabItem.Visibility = Visibility.Collapsed;
+                }
+                TabItem.IsSelected = false;
+            }
+
             protected override ValueTask OnDisposeAsync()
             {
                 return _lifetime.DisposeAsync();
             }
 
-            public void Hide()
-            {
-                if (Tab.Visibility != Visibility.Collapsed)
-                {
-                    Tab.Visibility = Visibility.Collapsed;
-                }
-            }
-
             public void Show()
             {
-                if (Tab.Visibility != Visibility.Visible)
+                if (TabItem.Visibility != Visibility.Visible)
                 {
-                    Tab.Visibility = Visibility.Visible;
+                    TabItem.Visibility = Visibility.Visible;
                 }
-                Tab.IsSelected = true;
+                TabItem.IsSelected = true;
             }
 
             #endregion
@@ -220,8 +251,6 @@ namespace Minimal.Mvvm.Windows
             set => SetValue(ActiveDocumentProperty, value);
         }
 
-        public IEnumerable<IAsyncDocument> Documents => _documents;
-
         public bool CloseButtonEnabled
         {
             get => (bool)GetValue(CloseButtonEnabledProperty);
@@ -229,6 +258,8 @@ namespace Minimal.Mvvm.Windows
         }
 
         public int Count => _documents.Count;
+
+        public IEnumerable<IAsyncDocument> Documents => _documents;
 
         public Type? UnresolvedViewType
         {
@@ -282,7 +313,7 @@ namespace Minimal.Mvvm.Windows
                             var document = GetDocument(tab);
                             if (document is not null)
                             {
-                                await document.CloseAsync(force: true);
+                                await document.CloseAsync(force: true).ConfigureAwait(false);
                             }
                         }
                     }
@@ -309,32 +340,73 @@ namespace Minimal.Mvvm.Windows
                 return;
             }
             Debug.Assert(Equals(sender, AssociatedObject));
-            if (sender is MetroTabControl tabControl)
+            if (sender is not MetroTabControl tabControl)
             {
-                try
-                {
-                    _isActiveDocumentChanging = true;
-                    ActiveDocument = (tabControl.SelectedItem is TabItem tabItem) ? GetDocument(tabItem) : null;
-                }
-                finally
-                {
-                    _isActiveDocumentChanging = false;
-                }
+                return;
+            }
+            try
+            {
+                _isActiveDocumentChanging = true;
+                ActiveDocument = (tabControl.SelectedItem is TabItem tabItem) ? GetDocument(tabItem) : null;
+            }
+            finally
+            {
+                _isActiveDocumentChanging = false;
             }
         }
 
-        private static void OnTabControlTabItemClosingEvent(object? sender, BaseMetroTabControl.TabItemClosingEventArgs e)
+        private void OnTabControlTabItemClosingEvent(object? sender, BaseMetroTabControl.TabItemClosingEventArgs e)
         {
-            var viewModel = ViewModelHelper.GetViewModelFromView(e.ClosingTabItem.Content);
-            if (viewModel is DocumentContentViewModelBase viewModelBase)
+            Debug.Assert(Equals(sender, AssociatedObject));
+            if (sender is not BaseMetroTabControl tabControl)
             {
-                e.Cancel = viewModelBase.CanClose() == false;
+                return;
             }
+
+            var document = GetDocument(e.ClosingTabItem) as TabbedDocument;
+
+            if (e.Cancel || document is null || document.IsClosing)
+            {
+                return;
+            }
+
+            e.Cancel = true;
+            tabControl.Dispatcher.InvokeAsync(async () => await CloseThisTabItemAsync(tabControl, e.ClosingTabItem, document.CancellationTokenSource.Token));
         }
 
         #endregion
 
         #region Methods
+
+        private static async ValueTask CloseThisTabItemAsync(BaseMetroTabControl tabControl, MetroTabItem tabItem, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var viewModel = ViewModelHelper.GetViewModelFromView(tabItem.Content);
+                Debug.Assert(viewModel is IAsyncDocumentContent);
+                if (viewModel is IAsyncDocumentContent documentContent && await documentContent.CanCloseAsync(cancellationToken) == false)
+                {
+                    cancellationToken.ThrowIfCancellationRequested();
+                    return;
+                }
+            }
+            catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+            {
+                //do nothing
+            }
+
+            var document = GetDocument(tabItem);
+            if (document?.HideInsteadOfClose == true)
+            {
+                document.Hide();
+                return;
+            }
+
+            // if the list is hard-coded (i.e. has no ItemsSource)
+            // then we remove the item from the collection
+            tabItem.ClearStyle();
+            tabControl.Items.Remove(tabItem);
+        }
 
         public async ValueTask<IAsyncDocument> CreateDocumentAsync(string? documentType, object? viewModel, object? parentViewModel, object? parameter, CancellationToken cancellationToken = default)
         {
@@ -343,7 +415,7 @@ namespace Minimal.Mvvm.Windows
             object? view;
             if (documentType == null && ViewTemplate == null && ViewTemplateSelector == null)
             {
-                view = GetUnresolvedViewType() ?? await GetViewLocator().GetOrCreateViewAsync(documentType, cancellationToken);
+                view = GetUnresolvedView() ?? await GetViewLocator().GetOrCreateViewAsync(documentType, cancellationToken);
                 await GetViewLocator().InitializeViewAsync(view, viewModel, parentViewModel, parameter, cancellationToken);
             }
             else
@@ -353,9 +425,14 @@ namespace Minimal.Mvvm.Windows
             var tab = new MetroTabItem
             {
                 Header = "Item",
-                Content = view,
-                CloseButtonEnabled = CloseButtonEnabled
+                Content = view
             };
+            BindingOperations.SetBinding(tab, MetroTabItem.CloseButtonEnabledProperty, new Binding()
+            {
+                Path = new PropertyPath(CloseButtonEnabledProperty),
+                Source = this,
+                Mode = BindingMode.OneWay
+            });
             AssociatedObject.Items.Add(tab);
             var document = new TabbedDocument(this, tab);
             return document;
@@ -369,7 +446,7 @@ namespace Minimal.Mvvm.Windows
                 {
                     return;
                 }
-                await Task.WhenAll(_documents.ToList().Select(x => x.CloseAsync().AsTask()));
+                await Task.WhenAll(_documents.ToList().Select(x => x.CloseAsync().AsTask())).ConfigureAwait(false);
                 if (_documents.Count == 0)
                 {
                     return;
@@ -405,11 +482,12 @@ namespace Minimal.Mvvm.Windows
             }
         }
 
-        private object? GetUnresolvedViewType()
+        private object? GetUnresolvedView()
         {
             return UnresolvedViewType == null ? null : Activator.CreateInstance(UnresolvedViewType);
         }
 
+        /// <inheritdoc />
         protected override void OnAttached()
         {
             base.OnAttached();
@@ -425,6 +503,7 @@ namespace Minimal.Mvvm.Windows
             }
         }
 
+        /// <inheritdoc />
         protected override void OnDetaching()
         {
             AssociatedObject!.Loaded -= OnTabControlLoaded;

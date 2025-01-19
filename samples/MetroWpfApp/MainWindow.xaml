@@ -43,6 +43,31 @@
                                         PlacementSavedCommand="{Binding PlacementSavedCommand}"/>
         <minimal:SettingsService Prefix="MainWindow" 
                                  DirectoryName="{Binding EnvironmentService.SettingsDirectory, FallbackValue={x:Null}}"/>
+        <minimal:WindowedDocumentService x:Name="Windows" 
+                                         ActiveDocument="{Binding ActiveWindow}"
+                                         UnresolvedViewType="{x:Type views:ErrorView}">
+            <minimal:WindowedDocumentService.WindowStyle>
+                <Style TargetType="{x:Type mah:MetroWindow}">
+                    <Setter Property="minimal:Interaction.BehaviorsTemplate">
+                        <Setter.Value>
+                            <DataTemplate>
+                                <ItemsControl>
+                                    <minimal:DialogCoordinatorService />
+                                    <minimal:WindowService Name="CurrentWindowService"/>
+                                    <minimal:EventTrigger EventName="ContentRendered" Command="{Binding ContentRenderedCommand}"/>
+                                </ItemsControl>
+                            </DataTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </minimal:WindowedDocumentService.WindowStyle>
+            <minimal:WindowedDocumentService.WindowType>
+                <x:Type TypeName="mah:MetroWindow"/>
+            </minimal:WindowedDocumentService.WindowType>
+            <minimal:Interaction.Behaviors>
+                <minimal:EventTrigger EventName="ActiveDocumentChanged" Command="{Binding ActiveWindowChangedCommand}"/>
+            </minimal:Interaction.Behaviors>
+        </minimal:WindowedDocumentService>
     </minimal:Interaction.Behaviors>
     <Grid>
         <Grid.RowDefinitions>
@@ -61,7 +86,7 @@
                              mah:TabControlHelper.Underlined="SelectedTabItem" 
                              mah:TabControlHelper.UnderlinePlacement="Bottom">
             <minimal:Interaction.Behaviors>
-                <minimal:MetroTabbedDocumentService x:Name="Documents" CloseButtonEnabled="True" 
+                <minimal:MetroTabbedDocumentService x:Name="Documents" CloseButtonEnabled="True"
                                                     ActiveDocument="{Binding ActiveDocument}"
                                                     UnresolvedViewType="{x:Type views:ErrorView}">
                     <minimal:Interaction.Behaviors>
@@ -77,6 +102,14 @@
                     <Run Text="{x:Static local:Loc.Documents_Opened}"/>
                     <Run Text=":"/>
                     <Run Text="{Binding Count, ElementName=Documents, Mode=OneWay}"/>
+                </TextBlock>
+            </StatusBarItem>
+            <Separator />
+            <StatusBarItem>
+                <TextBlock>
+                    <Run Text="{x:Static local:Loc.Windows_Opened}"/>
+                    <Run Text=":"/>
+                    <Run Text="{Binding Count, ElementName=Windows, Mode=OneWay}"/>
                 </TextBlock>
             </StatusBarItem>
             <Separator />

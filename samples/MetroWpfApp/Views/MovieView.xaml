@@ -8,52 +8,63 @@
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance {x:Type viewModels:MovieViewModel}, IsDesignTimeCreatable=True}"
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid DataContext="{Binding Movie}">
+    <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
+        <Grid DataContext="{Binding Movie}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
 
-        <GroupBox Grid.Row="0"
+            <GroupBox Grid.Row="0"
                   Margin="4 2"
                   Header="{x:Static local:Loc.Description}"
                   UseLayoutRounding="True">
-            <TextBlock Text="{Binding Description}" TextWrapping="Wrap"/>
-        </GroupBox>
+                <TextBlock Text="{Binding Description}" TextWrapping="Wrap"/>
+            </GroupBox>
 
-        <GroupBox Grid.Row="1"
+            <GroupBox Grid.Row="1"
                   Margin="4 2"
                   Header="{x:Static local:Loc.Directors}"
                   UseLayoutRounding="True">
-            <ItemsControl ItemsSource="{Binding Directors}">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding Name}"/>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </GroupBox>
+                <ItemsControl ItemsSource="{Binding Directors}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Name}"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </GroupBox>
 
-        <GroupBox Grid.Row="2"
+            <GroupBox Grid.Row="2"
                   Margin="4 2"
                   Header="{x:Static local:Loc.Writers}"
                   UseLayoutRounding="True">
-            <ItemsControl ItemsSource="{Binding Writers}">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding Name}"/>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </GroupBox>
+                <ItemsControl ItemsSource="{Binding Writers}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Name}"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </GroupBox>
 
-        <GroupBox Grid.Row="3"
+            <GroupBox Grid.Row="3"
                   Margin="4 2"
                   Header="{x:Static local:Loc.Storyline}"
                   UseLayoutRounding="True">
-            <TextBlock Text="{Binding Storyline}" TextWrapping="Wrap"/>
-        </GroupBox>
+                <TextBlock Text="{Binding Storyline}" TextWrapping="Wrap"/>
+            </GroupBox>
+        </Grid>
+        <StackPanel Grid.Row="1" HorizontalAlignment="Right" Visibility="{Binding IsWindowed, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Button Margin="0 5 5 5" UseLayoutRounding="True"
+                    Command="{Binding CloseCommand}"
+                    Content="{x:Static local:Loc.Close}" />
+        </StackPanel>
     </Grid>
 </UserControl>

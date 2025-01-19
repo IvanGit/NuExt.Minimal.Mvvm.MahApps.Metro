@@ -205,10 +205,7 @@ namespace Minimal.Mvvm.Windows
             finally
             {
                 await dialogCoordinator.HideMetroDialogAsync(this, dialog);
-                BindingOperations.ClearBinding(dialog, MetroDialog.ValidatesOnDataErrorsProperty);
-                BindingOperations.ClearBinding(dialog, MetroDialog.ValidatesOnNotifyDataErrorsProperty);
-                BindingOperations.ClearBinding(dialog, BaseMetroDialog.DialogContentMarginProperty);
-                BindingOperations.ClearBinding(dialog, BaseMetroDialog.DialogContentWidthProperty);
+                BindingOperations.ClearAllBindings(dialog);
             }
         }
 

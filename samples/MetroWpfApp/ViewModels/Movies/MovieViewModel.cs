@@ -1,7 +1,10 @@
-﻿using Minimal.Mvvm.Windows;
+﻿using MahApps.Metro.Controls.Dialogs;
+using Minimal.Mvvm;
+using Minimal.Mvvm.Windows;
 using MovieWpfApp.Models;
 using System.ComponentModel;
 using System.Diagnostics;
+using static AccessModifier;
 
 namespace MovieWpfApp.ViewModels
 {
@@ -9,7 +12,18 @@ namespace MovieWpfApp.ViewModels
     {
         #region Properties
 
+        [Notify(Setter = Private)]
+        private bool _isWindowed;
+
         public MovieModel Movie => (MovieModel)Parameter!;
+
+        #endregion
+
+        #region Services
+
+        private IDialogCoordinator DialogCoordinator => GetService<IDialogCoordinator>()!;
+
+        private WindowService? WindowService => GetService<WindowService>();
 
         #endregion
 
@@ -26,6 +40,28 @@ namespace MovieWpfApp.ViewModels
         #endregion
 
         #region Methods
+
+        public override async ValueTask<bool> CanCloseAsync(CancellationToken cancellationToken)
+        {
+            Debug.Assert(DialogCoordinator != null, $"{nameof(DialogCoordinator)} is null");
+
+            var dialogSettings = new MetroDialogSettings
+            {
+                CancellationToken = cancellationToken,
+                AffirmativeButtonText = Loc.Yes,
+                NegativeButtonText = Loc.No,
+            };
+
+            var dialogResult = await DialogCoordinator!.ShowMessageAsync(this, Loc.Confirmation,
+                string.Format(Loc.Are_you_sure_you_want_to_close__Arg0__, Movie.Name),
+                MessageDialogStyle.AffirmativeAndNegative, dialogSettings);
+            if (dialogResult != MessageDialogResult.Affirmative)
+            {
+                return false;
+            }
+
+            return await base.CanCloseAsync(cancellationToken).ConfigureAwait(false);
+        }
 
         protected override async Task OnInitializeAsync(CancellationToken cancellationToken)
         {
