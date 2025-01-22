@@ -149,18 +149,7 @@ namespace Minimal.Mvvm.Windows
 
             private void CloseTab()
             {
-                TabItem.Visibility = Visibility.Collapsed;
-                /*if (TabItem.CloseTabCommand != null)
-                {
-                    if (TabItem.CloseTabCommand is RoutedCommand command)
-                    {
-                        command.Execute(TabItem.CloseTabCommandParameter, TabItem);
-                    }
-                    else if (TabItem.CloseTabCommand.CanExecute(TabItem.CloseTabCommandParameter))
-                    {
-                        TabItem.CloseTabCommand.Execute(TabItem.CloseTabCommandParameter);
-                    }
-                }*/
+                Hide();
             }
 
             private void DetachContent()
@@ -520,7 +509,7 @@ namespace Minimal.Mvvm.Windows
             }
             if (tabControl.ItemsSource != null)
             {
-                throw new InvalidOperationException("Can't use not null ItemsSource in this service");
+                throw new InvalidOperationException("Can't use not null ItemsSource in this service.");
             }
             var lifetime = new Lifetime();
             if (tabControl.Items is INotifyCollectionChanged collection)
