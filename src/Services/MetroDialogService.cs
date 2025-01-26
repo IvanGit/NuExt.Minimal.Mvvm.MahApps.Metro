@@ -154,7 +154,7 @@ namespace Minimal.Mvvm.Windows
             Debug.Assert(DialogCoordinator != null, $"{nameof(DialogCoordinator)} is null");
 
             cancellationToken.ThrowIfCancellationRequested();
-            var view = await CreateAndInitializeViewAsync(documentType, viewModel, parentViewModel, parameter, cancellationToken);
+            var view = await CreateViewAsync(documentType, cancellationToken);
 
             var dialogSettings = new MetroDialogSettings
             {
@@ -170,6 +170,7 @@ namespace Minimal.Mvvm.Windows
                 CommandsSource = dialogCommands
             };
 
+            ViewModelHelper.SetDataContextBinding(view, FrameworkElement.DataContextProperty, dialog);
             BindingOperations.SetBinding(dialog, MetroDialog.ValidatesOnDataErrorsProperty, new Binding()
             {
                 Path = new PropertyPath(ValidatesOnDataErrorsProperty),
@@ -194,6 +195,8 @@ namespace Minimal.Mvvm.Windows
                 Source = this,
                 Mode = BindingMode.OneWay
             });
+
+            await ViewModelHelper.InitializeViewAsync(view, viewModel, parentViewModel, parameter, cancellationToken);
 
             var dialogCoordinator = DialogCoordinator ?? MahApps.Metro.Controls.Dialogs.DialogCoordinator.Instance;
             await dialogCoordinator.ShowMetroDialogAsync(this, dialog);

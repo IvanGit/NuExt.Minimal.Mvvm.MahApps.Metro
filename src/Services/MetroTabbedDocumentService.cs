@@ -6,7 +6,6 @@ using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Input;
 
 namespace Minimal.Mvvm.Windows
 {
@@ -34,9 +33,7 @@ namespace Minimal.Mvvm.Windows
                 _lifetime.Add(() => TabControl?.Items.Remove(TabItem));//second, remove tab item
                 _lifetime.Add(() => TabItem.ClearStyle());//first, clear tab item style
                 _lifetime.Add(() => BindingOperations.ClearBinding(TabItem, MetroTabItem.CloseButtonEnabledProperty));
-                _lifetime.AddBracket(
-                    () => ViewModelHelper.SetDataContextBinding(TabItem.Content, FrameworkElement.DataContextProperty, TabItem),
-                    () => ViewModelHelper.ClearDataContextBinding(FrameworkElement.DataContextProperty, TabItem));//third
+                _lifetime.Add(() => BindingOperations.ClearBinding(TabItem, FrameworkElement.DataContextProperty));//third, detach vm
                 _lifetime.Add(DetachContent);//second, detach content
                 _lifetime.AddAsync(DisposeViewModelAsync);//first, dispose vm
                 _lifetime.AddBracket(() => SetDocument(TabItem, this), () => SetDocument(TabItem, null));
@@ -45,7 +42,7 @@ namespace Minimal.Mvvm.Windows
                     () => TabItem.IsVisibleChanged -= OnTabIsVisibleChanged);
                 _lifetime.AddBracket(
                     () => ViewModelHelper.SetViewTitleBinding(TabItem.Content, HeaderedContentControl.HeaderProperty, TabItem),
-                    () => ViewModelHelper.ClearViewTitleBinding(HeaderedContentControl.HeaderProperty, TabItem));
+                    () => BindingOperations.ClearBinding(TabItem, HeaderedContentControl.HeaderProperty));
 
                 var dpd = DependencyPropertyDescriptor.FromProperty(HeaderedContentControl.HeaderProperty, typeof(HeaderedContentControl));
                 if (dpd != null)
@@ -281,7 +278,7 @@ namespace Minimal.Mvvm.Windows
         {
             if (e.PropertyName == nameof(_documents.Count))
             {
-                OnPropertyChanged(nameof(Count));
+                OnPropertyChanged(EventArgsCache.CountPropertyChanged);
             }
         }
 
@@ -352,9 +349,8 @@ namespace Minimal.Mvvm.Windows
                 return;
             }
 
-            var document = GetDocument(e.ClosingTabItem) as TabbedDocument;
 
-            if (e.Cancel || document is null || document.IsClosing)
+            if (e.Cancel || GetDocument(e.ClosingTabItem) is not TabbedDocument document || document.IsClosing)
             {
                 return;
             }
@@ -405,25 +401,29 @@ namespace Minimal.Mvvm.Windows
             if (documentType == null && ViewTemplate == null && ViewTemplateSelector == null)
             {
                 view = GetUnresolvedView() ?? await GetViewLocator().GetOrCreateViewAsync(documentType, cancellationToken);
-                await GetViewLocator().InitializeViewAsync(view, viewModel, parentViewModel, parameter, cancellationToken);
             }
             else
             {
-                view = await CreateAndInitializeViewAsync(documentType, viewModel, parentViewModel, parameter, cancellationToken);
+                view = await CreateViewAsync(documentType, cancellationToken);
             }
-            var tab = new MetroTabItem
+
+            var tabItem = new MetroTabItem
             {
                 Header = "Item",
                 Content = view
             };
-            BindingOperations.SetBinding(tab, MetroTabItem.CloseButtonEnabledProperty, new Binding()
+            BindingOperations.SetBinding(tabItem, MetroTabItem.CloseButtonEnabledProperty, new Binding()
             {
                 Path = new PropertyPath(CloseButtonEnabledProperty),
                 Source = this,
                 Mode = BindingMode.OneWay
             });
-            AssociatedObject.Items.Add(tab);
-            var document = new TabbedDocument(this, tab);
+            ViewModelHelper.SetDataContextBinding(view, FrameworkElement.DataContextProperty, tabItem);
+
+            await ViewModelHelper.InitializeViewAsync(view, viewModel, parentViewModel, parameter, cancellationToken);
+
+            AssociatedObject.Items.Add(tabItem);
+            var document = new TabbedDocument(this, tabItem);
             return document;
         }
 
@@ -529,6 +529,7 @@ namespace Minimal.Mvvm.Windows
 
     internal static partial class EventArgsCache
     {
+        internal static readonly PropertyChangedEventArgs CountPropertyChanged = new(nameof(IAsyncDocumentManagerService.Count));
         internal static readonly PropertyChangedEventArgs TitlePropertyChanged = new(nameof(IAsyncDocument.Title));
     }
 }
