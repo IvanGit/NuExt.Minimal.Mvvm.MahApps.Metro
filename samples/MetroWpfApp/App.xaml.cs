@@ -89,7 +89,10 @@ namespace MovieWpfApp
         private void Application_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
             var logger = GetService<ILogger>();
-            logger?.LogError(e.Exception, "Dispatcher Unhandled Exception: {Exception}.", e.Exception.Message);
+            if (logger?.IsEnabled(LogLevel.Error) == true)
+            {
+                logger.LogError(e.Exception, "Dispatcher Unhandled Exception: {Exception}.", e.Exception.Message);
+            }
             e.Handled = true;
         }
 
@@ -102,11 +105,17 @@ namespace MovieWpfApp
             }
             catch (Exception ex)
             {
+                if (logger?.IsEnabled(LogLevel.Error) == true)
+                {
+                    logger.LogError(ex, "Application Exit Exception: {Exception}.", ex.Message);
+                }
                 Debug.Assert(false, ex.Message);
-                logger?.LogError(ex, "Application Exit Exception: {Exception}.", ex.Message);
             }
 
-            logger?.LogInformation("Application exited with code {ExitCode}.", e.ApplicationExitCode);
+            if (logger?.IsEnabled(LogLevel.Information) == true)
+            {
+                logger.LogInformation("Application exited with code {ExitCode}.", e.ApplicationExitCode);
+            }
             LogManager.Shutdown();
         }
 
@@ -123,7 +132,10 @@ namespace MovieWpfApp
             }
             catch (Exception ex)
             {
-                logger?.LogError(ex, "Application SessionEnding Exception: {Exception}.", ex.Message);
+                if (logger?.IsEnabled(LogLevel.Error) == true)
+                {
+                    logger.LogError(ex, "Application SessionEnding Exception: {Exception}.", ex.Message);
+                }
             }
         }
 
@@ -180,7 +192,10 @@ namespace MovieWpfApp
         private void TaskScheduler_UnobservedTaskException(object? sender, UnobservedTaskExceptionEventArgs e)
         {
             var logger = GetService<ILogger>();
-            logger?.LogError(e.Exception, "TaskScheduler Unobserved Task Exception: {Exception}.", e.Exception.Message);
+            if (logger?.IsEnabled(LogLevel.Error) == true)
+            {
+                logger.LogError(e.Exception, "TaskScheduler Unobserved Task Exception: {Exception}.", e.Exception.Message);
+            }
         }
 
         #endregion
@@ -216,7 +231,7 @@ namespace MovieWpfApp
 #endif
                 builder.AddNLog(config);
             });
-            LogManager.Configuration.Variables["basedir"] = environmentService.LogsDirectory;
+            LogManager.Configuration!.Variables["basedir"] = environmentService.LogsDirectory;
             ServiceContainer.RegisterService(loggerFactory);
 
             var logger = loggerFactory.CreateLogger("App");

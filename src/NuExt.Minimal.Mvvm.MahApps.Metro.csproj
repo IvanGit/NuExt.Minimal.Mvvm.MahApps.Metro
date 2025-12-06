@@ -1,10 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net9.0-windows;net8.0-windows;net462</TargetFrameworks>
+    <TargetFrameworks>net10.0-windows;net9.0-windows;net8.0-windows;net462</TargetFrameworks>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <ImplicitUsings>enable</ImplicitUsings>
+    <TreatWarningsAsErrors Condition="'$(Configuration)' == 'Release'">true</TreatWarningsAsErrors>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <PackageTags>nuext;minimal;mvvm;wpf;xaml;ui;metro;modern;async</PackageTags>
     <Description>Extensions for the MahApps.Metro toolkit using the Minimal MVVM Framework for streamlined Metro-style WPF app development.
@@ -14,23 +15,22 @@ Minimal.Mvvm.Windows.DialogCoordinatorService
 Minimal.Mvvm.Windows.MetroDialogService
 Minimal.Mvvm.Windows.MetroTabbedDocumentService
 MahApps.Metro.Controls.Dialogs.MetroDialog</Description>
-    <Version>0.3.4-pre</Version>
+    <Version>0.4.0-pre</Version>
     <RootNamespace>Minimal.Mvvm.Windows</RootNamespace>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
-    <NoWarn>$(NoWarn);1591</NoWarn>
+    <NoWarn>$(NoWarn);1591;NETSDK1233</NoWarn>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageIcon>logo128.png</PackageIcon>
     <PackageProjectUrl>https://github.com/IvanGit/NuExt.Minimal.Mvvm.MahApps.Metro</PackageProjectUrl>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MahApps.Metro" Version="3.0.0-alpha0513" />
-    <PackageReference Include="System.Text.Json" Version="9.0.2" />
+    <PackageReference Include="MahApps.Metro" Version="3.0.0-rc0529" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(UseNuExtPackages)' == 'true'">
-    <PackageReference Include="NuExt.Minimal.Mvvm.Windows" Version="0.3.5" />
-    <PackageReference Include="NuExt.Minimal.Mvvm.SourceGenerator" Version="0.3.2">
+    <PackageReference Include="NuExt.Minimal.Mvvm.Windows" Version="0.4.0" />
+    <PackageReference Include="NuExt.Minimal.Mvvm.SourceGenerator" Version="0.4.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
