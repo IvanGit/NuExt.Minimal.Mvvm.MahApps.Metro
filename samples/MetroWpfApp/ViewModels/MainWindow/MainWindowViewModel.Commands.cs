@@ -4,6 +4,7 @@ using Minimal.Mvvm.Windows;
 using MovieWpfApp.Models;
 using MovieWpfApp.Views;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
 using static AccessModifier;
@@ -220,18 +221,74 @@ namespace MovieWpfApp.ViewModels
         protected override void CreateCommands()
         {
             base.CreateCommands();
-            ActiveDocumentChangedCommand = RegisterCommand(UpdateTitle);
-            ActiveWindowChangedCommand = RegisterCommand(UpdateTitle);
-            ChangeAccentColorCommand = RegisterCommand<string?>(ChangeAccentColor, CanChangeAccentColor);
-            ChangeAppThemeCommand = RegisterCommand<string?>(ChangeAppTheme, CanChangeAppTheme);
-            ShowMoviesCommand = RegisterAsyncCommand(ShowMoviesAsync, CanShowMovies);
-            ShowHideActiveDocumentCommand = RegisterCommand<bool>(ShowHideActiveDocument, CanShowHideActiveDocument);
-            ShowHideActiveWindowCommand = RegisterCommand<bool>(ShowHideActiveWindow, CanShowHideActiveWindow);
-            CloseActiveDocumentCommand = RegisterAsyncCommand(CloseActiveDocumentAsync, CanCloseActiveDocument);
-            CloseActiveWindowCommand = RegisterAsyncCommand(CloseActiveWindowAsync, CanCloseActiveWindow);
-            OpenMovieCommand = RegisterAsyncCommand<MovieModel>(OpenMovieAsync, CanOpenMovie);
-            OpenMovieExternalCommand = RegisterAsyncCommand<MovieModel>(OpenMovieExternalAsync, CanOpenMovie);
-            CloseMovieCommand = RegisterAsyncCommand<MovieModel>(CloseMovieAsync, CanCloseMovie);
+
+            ActiveDocumentChangedCommand = new RelayCommand(UpdateTitle);
+            ActiveWindowChangedCommand = new RelayCommand(UpdateTitle);
+            ChangeAccentColorCommand = new RelayCommand<string?>(ChangeAccentColor, CanChangeAccentColor);
+            ChangeAppThemeCommand = new RelayCommand<string?>(ChangeAppTheme, CanChangeAppTheme);
+            ShowMoviesCommand = new AsyncCommand(ShowMoviesAsync, CanShowMovies);
+            ShowHideActiveDocumentCommand = new RelayCommand<bool>(ShowHideActiveDocument, CanShowHideActiveDocument);
+            ShowHideActiveWindowCommand = new RelayCommand<bool>(ShowHideActiveWindow, CanShowHideActiveWindow);
+            CloseActiveDocumentCommand = new AsyncCommand(CloseActiveDocumentAsync, CanCloseActiveDocument);
+            CloseActiveWindowCommand = new AsyncCommand(CloseActiveWindowAsync, CanCloseActiveWindow);
+            OpenMovieCommand = new AsyncCommand<MovieModel>(OpenMovieAsync, CanOpenMovie);
+            OpenMovieExternalCommand = new AsyncCommand<MovieModel>(OpenMovieExternalAsync, CanOpenMovie);
+            CloseMovieCommand = new AsyncCommand<MovieModel>(CloseMovieAsync, CanCloseMovie);
+        }
+
+        protected override ICommand? GetCurrentCommand([CallerMemberName] string? callerName = null)
+        {
+            return callerName switch
+            {
+                nameof(UpdateTitle) => throw new ArgumentException($"Multiple commands found for method '{callerName}'.", nameof(callerName)),
+                nameof(ChangeAccentColor) => ChangeAccentColorCommand,
+                nameof(ChangeAppTheme) => ChangeAppThemeCommand,
+                nameof(ShowMoviesAsync) => ShowMoviesCommand,
+                nameof(ShowHideActiveDocument) => ShowHideActiveDocumentCommand,
+                nameof(ShowHideActiveWindow) => ShowHideActiveWindowCommand,
+                nameof(CloseActiveDocumentAsync) => CloseActiveDocumentCommand,
+                nameof(CloseActiveWindowAsync) => CloseActiveWindowCommand,
+                nameof(OpenMovieAsync) => OpenMovieCommand,
+                nameof(OpenMovieExternalAsync) => OpenMovieExternalCommand,
+                nameof(CloseMovieAsync) => CloseMovieCommand,
+                _ => base.GetCurrentCommand(callerName)
+            };
+        }
+
+        protected override void GetAllCommands(ref ValueListBuilder<(string PropertyName, ICommand? Command)> builder)
+        {
+            base.GetAllCommands(ref builder);
+
+            builder.Append((nameof(ActiveDocumentChangedCommand), ActiveDocumentChangedCommand));
+            builder.Append((nameof(ActiveWindowChangedCommand), ActiveWindowChangedCommand));
+            builder.Append((nameof(ChangeAccentColorCommand), ChangeAccentColorCommand));
+            builder.Append((nameof(ChangeAppThemeCommand), ChangeAppThemeCommand));
+            builder.Append((nameof(ShowMoviesCommand), ShowMoviesCommand));
+            builder.Append((nameof(ShowHideActiveDocumentCommand), ShowHideActiveDocumentCommand));
+            builder.Append((nameof(ShowHideActiveWindowCommand), ShowHideActiveWindowCommand));
+            builder.Append((nameof(CloseActiveDocumentCommand), CloseActiveDocumentCommand));
+            builder.Append((nameof(CloseActiveWindowCommand), CloseActiveWindowCommand));
+            builder.Append((nameof(OpenMovieCommand), OpenMovieCommand));
+            builder.Append((nameof(OpenMovieExternalCommand), OpenMovieExternalCommand));
+            builder.Append((nameof(CloseMovieCommand), CloseMovieCommand));
+        }
+
+        protected override void NullifyCommands()
+        {
+            ActiveDocumentChangedCommand = null;
+            ActiveWindowChangedCommand = null;
+            ChangeAccentColorCommand = null;
+            ChangeAppThemeCommand = null;
+            ShowMoviesCommand = null;
+            ShowHideActiveDocumentCommand = null;
+            ShowHideActiveWindowCommand = null;
+            CloseActiveDocumentCommand = null;
+            CloseActiveWindowCommand = null;
+            OpenMovieCommand = null;
+            OpenMovieExternalCommand = null;
+            CloseMovieCommand = null;
+
+            base.NullifyCommands();
         }
 
         protected override async ValueTask OnContentRenderedAsync(CancellationToken cancellationToken)

@@ -509,7 +509,7 @@ namespace Minimal.Mvvm.Windows
             }
             if (tabControl.ItemsSource != null)
             {
-                throw new InvalidOperationException("Can't use not null ItemsSource in this service.");
+                Throw.InvalidOperationException("Can't use not null ItemsSource in this service.");
             }
             var lifetime = new Lifetime();
             if (tabControl.Items is INotifyCollectionChanged collection)

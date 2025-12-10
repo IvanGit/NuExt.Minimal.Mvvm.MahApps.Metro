@@ -2,7 +2,9 @@
 using Minimal.Mvvm;
 using MovieWpfApp.Models;
 using MovieWpfApp.Views;
+using System.Runtime.CompilerServices;
 using System.Windows;
+using System.Windows.Input;
 using static AccessModifier;
 
 namespace MovieWpfApp.ViewModels
@@ -16,6 +18,8 @@ namespace MovieWpfApp.ViewModels
         [Notify(Setter = Private)]
         private async Task DeleteAsync()
         {
+            VerifyAccess();
+
             var cancellationToken = GetCurrentCancellationToken();
 
             var dialogSettings = new MetroDialogSettings
@@ -57,6 +61,8 @@ namespace MovieWpfApp.ViewModels
         [Notify(Setter = Private)]
         private async Task EditAsync()
         {
+            VerifyAccess();
+
             var cancellationToken = GetCurrentCancellationToken();
 
             var clone = SelectedItem!.Clone();
@@ -112,6 +118,8 @@ namespace MovieWpfApp.ViewModels
         [Notify(Setter = Private)]
         private async Task NewGroupAsync()
         {
+            VerifyAccess();
+
             var cancellationToken = GetCurrentCancellationToken();
 
             var dialogSettings = new MetroDialogSettings 
@@ -236,14 +244,59 @@ namespace MovieWpfApp.ViewModels
         protected override void CreateCommands()
         {
             base.CreateCommands();
-            DeleteCommand = RegisterAsyncCommand(DeleteAsync, CanDelete);
-            EditCommand = RegisterAsyncCommand(EditAsync, CanEdit);
-            NewGroupCommand = RegisterAsyncCommand(NewGroupAsync, CanNewGroup);
-            NewMovieCommand = RegisterAsyncCommand(NewMovieAsync, CanNewMovie);
-            MoveCommand = RegisterAsyncCommand<MovieModelBase>(MoveAsync, CanMove);
-            OpenMovieCommand = RegisterAsyncCommand<MovieModelBase?>(OpenMovieAsync, CanOpenMovie);
-            OpenMovieExternalCommand = RegisterAsyncCommand<MovieModelBase?>(OpenMovieExternalAsync, CanOpenMovie);
-            ExpandOrCollapseCommand = RegisterCommand<bool>(ExpandOrCollapse, _ => IsUsable);
+
+            DeleteCommand = new AsyncCommand(DeleteAsync, CanDelete);
+            EditCommand = new AsyncCommand(EditAsync, CanEdit);
+            NewGroupCommand = new AsyncCommand(NewGroupAsync, CanNewGroup);
+            NewMovieCommand = new AsyncCommand(NewMovieAsync, CanNewMovie);
+            MoveCommand = new AsyncCommand<MovieModelBase>(MoveAsync, CanMove);
+            OpenMovieCommand = new AsyncCommand<MovieModelBase?>(OpenMovieAsync, CanOpenMovie);
+            OpenMovieExternalCommand = new AsyncCommand<MovieModelBase?>(OpenMovieExternalAsync, CanOpenMovie);
+            ExpandOrCollapseCommand = new RelayCommand<bool>(ExpandOrCollapse, _ => IsUsable);
+        }
+
+        protected override ICommand? GetCurrentCommand([CallerMemberName] string? callerName = null)
+        {
+            return callerName switch
+            {
+                nameof(DeleteAsync) => DeleteCommand,
+                nameof(EditAsync) => EditCommand,
+                nameof(NewGroupAsync) => NewGroupCommand,
+                nameof(NewMovieAsync) => NewMovieCommand,
+                nameof(MoveAsync) => MoveCommand,
+                nameof(OpenMovieAsync) => OpenMovieCommand,
+                nameof(OpenMovieExternalAsync) => OpenMovieExternalCommand,
+                nameof(ExpandOrCollapse) => ExpandOrCollapseCommand,
+                _ => base.GetCurrentCommand(callerName)
+            };
+        }
+
+        protected override void GetAllCommands(ref ValueListBuilder<(string PropertyName, ICommand? Command)> builder)
+        {
+            base.GetAllCommands(ref builder);
+
+            builder.Append((nameof(DeleteCommand), DeleteCommand));
+            builder.Append((nameof(EditCommand), EditCommand));
+            builder.Append((nameof(NewGroupCommand), NewGroupCommand));
+            builder.Append((nameof(NewMovieCommand), NewMovieCommand));
+            builder.Append((nameof(MoveCommand), MoveCommand));
+            builder.Append((nameof(OpenMovieCommand), OpenMovieCommand));
+            builder.Append((nameof(OpenMovieExternalCommand), OpenMovieExternalCommand));
+            builder.Append((nameof(ExpandOrCollapseCommand), ExpandOrCollapseCommand));
+        }
+
+        protected override void NullifyCommands()
+        {
+            DeleteCommand = null;
+            EditCommand = null;
+            NewGroupCommand = null;
+            NewMovieCommand = null;
+            MoveCommand = null;
+            OpenMovieCommand = null;
+            OpenMovieExternalCommand = null;
+            ExpandOrCollapseCommand = null;
+
+            base.NullifyCommands();
         }
 
         protected override void OnLoaded()

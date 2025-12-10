@@ -83,7 +83,7 @@ namespace MovieWpfApp.Models
             get
             {
                 IDataErrorInfo dataErrorInfo = this;
-                var sb = new ValueStringBuilder();
+                var sb = new ValueStringBuilder(stackalloc char[128]);
                 var separator = string.Empty;
                 foreach (var property in s_validatableProperties)
                 {
@@ -101,7 +101,7 @@ namespace MovieWpfApp.Models
         {
             get
             {
-                var sb = new ValueStringBuilder();
+                var sb = new ValueStringBuilder(stackalloc char[128]);
                 switch (columnName)
                 {
                     case nameof(Name):

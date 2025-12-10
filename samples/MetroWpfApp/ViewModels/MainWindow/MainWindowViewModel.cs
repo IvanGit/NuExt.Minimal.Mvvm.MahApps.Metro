@@ -104,9 +104,11 @@ namespace MovieWpfApp.ViewModels
 
         protected override async ValueTask<bool> CanCloseAsync(CancellationToken cancellationToken)
         {
+            VerifyAccess();
+
             if (DialogCoordinator == null)
             {
-                MessageBoxResult dialogResult = MessageBox.Show(
+                MessageBoxResult dialogResult = MessageBox.Show(WindowService?.Window,
                     string.Format(Loc.Are_you_sure_you_want_to_close__Arg0__, $"{AssemblyInfo.Current.Product}"),
                     Loc.Confirmation,
                     MessageBoxButton.YesNo,
@@ -125,7 +127,7 @@ namespace MovieWpfApp.ViewModels
                     NegativeButtonText = Loc.No,
                 };
 
-                var dialogResult = await DialogCoordinator!.ShowMessageAsync(this, Loc.Confirmation,
+                var dialogResult = await DialogCoordinator.ShowMessageAsync(this, Loc.Confirmation,
                     string.Format(Loc.Are_you_sure_you_want_to_close__Arg0__, $"{AssemblyInfo.Current.Product}"),
                     MessageDialogStyle.AffirmativeAndNegative, dialogSettings);
                 if (dialogResult != MessageDialogResult.Affirmative)
@@ -198,15 +200,25 @@ namespace MovieWpfApp.ViewModels
 
         protected override async void OnError(Exception ex, [CallerMemberName] string? callerName = null)
         {
-            base.OnError(ex, callerName);
+            if (!Dispatcher.CheckAccess())
+            {
+                Dispatcher.Invoke(new Action<Exception, string?>(OnError), ex, callerName);
+                return;
+            }
+
+            VerifyAccess();
+
 #pragma warning disable IDE0079
 #pragma warning disable CA2254
-            Logger.LogError(ex, Loc.An_error_has_occurred_in__Caller____Exception_, callerName, ex.Message);
+            if (Logger.IsEnabled(LogLevel.Error))
+            {
+                Logger.LogError(ex, Loc.An_error_has_occurred_in__Caller____Exception_, callerName, ex.Message);
+            }
 #pragma warning restore CA2254
 #pragma warning restore IDE0079
             if (DialogCoordinator == null)
             {
-                MessageBox.Show(string.Format(Loc.An_error_has_occurred_in_Arg0_Arg1, callerName, ex.Message), Loc.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(WindowService?.Window, string.Format(Loc.An_error_has_occurred_in_Arg0_Arg1, callerName, ex.Message), Loc.Error, MessageBoxButton.OK, MessageBoxImage.Error);
             }
             else
             {

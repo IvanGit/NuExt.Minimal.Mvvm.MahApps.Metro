@@ -6,7 +6,7 @@
     <UseWPF>true</UseWPF>
     <ImplicitUsings>enable</ImplicitUsings>
     <TreatWarningsAsErrors Condition="'$(Configuration)' == 'Release'">true</TreatWarningsAsErrors>
-    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild Condition="'$(Configuration)' == 'Release'">true</GeneratePackageOnBuild>
     <PackageTags>nuext;minimal;mvvm;wpf;xaml;ui;metro;modern;async</PackageTags>
     <Description>Extensions for the MahApps.Metro toolkit using the Minimal MVVM Framework for streamlined Metro-style WPF app development.
 
@@ -15,7 +15,7 @@ Minimal.Mvvm.Windows.DialogCoordinatorService
 Minimal.Mvvm.Windows.MetroDialogService
 Minimal.Mvvm.Windows.MetroTabbedDocumentService
 MahApps.Metro.Controls.Dialogs.MetroDialog</Description>
-    <Version>0.4.0-pre</Version>
+    <Version>0.4.1-pre</Version>
     <RootNamespace>Minimal.Mvvm.Windows</RootNamespace>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);1591;NETSDK1233</NoWarn>
@@ -29,8 +29,8 @@ MahApps.Metro.Controls.Dialogs.MetroDialog</Description>
   </ItemGroup>
 
   <ItemGroup Condition="'$(UseNuExtPackages)' == 'true'">
-    <PackageReference Include="NuExt.Minimal.Mvvm.Windows" Version="0.4.0" />
-    <PackageReference Include="NuExt.Minimal.Mvvm.SourceGenerator" Version="0.4.0">
+    <PackageReference Include="NuExt.Minimal.Mvvm.Windows" Version="0.4.1" />
+    <PackageReference Include="NuExt.Minimal.Mvvm.SourceGenerator" Version="0.4.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>

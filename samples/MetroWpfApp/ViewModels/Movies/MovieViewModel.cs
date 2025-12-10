@@ -43,6 +43,8 @@ namespace MovieWpfApp.ViewModels
 
         public override async ValueTask<bool> CanCloseAsync(CancellationToken cancellationToken)
         {
+            VerifyAccess();
+
             Debug.Assert(DialogCoordinator != null, $"{nameof(DialogCoordinator)} is null");
 
             var dialogSettings = new MetroDialogSettings

@@ -109,7 +109,7 @@ namespace MovieWpfApp
                 {
                     logger.LogError(ex, "Application Exit Exception: {Exception}.", ex.Message);
                 }
-                Debug.Assert(false, ex.Message);
+                Debug.Fail(ex.Message);
             }
 
             if (logger?.IsEnabled(LogLevel.Information) == true)
@@ -322,7 +322,7 @@ namespace MovieWpfApp
 
         #endregion
 
-        #region IServiceProvider
+        #region IServiceProvider implementation
 
         public object? GetService(Type serviceType)
         {
