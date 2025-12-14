@@ -24,8 +24,9 @@ namespace Minimal.Mvvm.Windows
             private bool _isClosing;
 
             public TabbedDocument(MetroTabbedDocumentService owner, MetroTabItem tabItem)
+                 : base(continueOnCapturedContext: true)
             {
-                _ = owner ?? throw new ArgumentNullException(nameof(owner));
+                ArgumentNullException.ThrowIfNull(owner);
                 TabItem = tabItem ?? throw new ArgumentNullException(nameof(tabItem));
 
                 _lifetime.AddDisposable(CancellationTokenSource);
@@ -179,8 +180,9 @@ namespace Minimal.Mvvm.Windows
                 TabItem.IsSelected = false;
             }
 
-            protected override ValueTask OnDisposeAsync()
+            protected override ValueTask DisposeAsyncCore()
             {
+                Debug.Assert(ContinueOnCapturedContext);
                 return _lifetime.DisposeAsync();
             }
 

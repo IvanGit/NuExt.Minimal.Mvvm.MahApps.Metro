@@ -22,7 +22,7 @@ namespace MovieWpfApp
     /// <summary>
     /// Interaction logic for App.xaml
     /// </summary>
-    public sealed partial class App : IServiceProvider, IDispatcherObject, INotifyPropertyChanged
+    public sealed partial class App : IServiceProvider, INotifyPropertyChanged, IDispatcherObject
     {
         private readonly CancellationTokenSource _cts = new();
         private readonly bool _createdNew;
@@ -52,7 +52,6 @@ namespace MovieWpfApp
 
         public AppSettings Settings { get; } = new();
 
-        public Thread Thread => Dispatcher.Thread;
 
         #endregion
 
@@ -287,13 +286,13 @@ namespace MovieWpfApp
             {
                 while (await awaiter.WaitOneAsync(cancellationToken))//_ewh is set
                 {
-                    await Current.Dispatcher.InvokeAsync(() =>
+                    await this.InvokeAsync(() =>
                     {
                         if (cancellationToken.IsCancellationRequested)
                         {
                             return;
                         }
-                        Current.MainWindow?.BringToFront();
+                        MainWindow?.BringToFront();
                     });
                 }
             }
@@ -346,6 +345,7 @@ namespace MovieWpfApp
         }
 
         #endregion
+
     }
 
 }
