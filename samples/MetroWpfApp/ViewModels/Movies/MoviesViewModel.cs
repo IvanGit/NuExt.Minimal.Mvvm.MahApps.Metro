@@ -67,7 +67,7 @@ namespace MovieWpfApp.ViewModels
 
         protected override async ValueTask OnDisposeAsync()
         {
-            Settings!.SelectedPath = SelectedItem?.GetPath();
+            Settings?.SelectedPath = SelectedItem?.GetPath();
 
             await base.OnDisposeAsync();
         }

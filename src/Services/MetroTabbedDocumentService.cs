@@ -68,9 +68,9 @@ namespace Minimal.Mvvm.Windows
 
             internal bool IsClosing => _isClosing;
 
-            private MetroTabControl? TabControl => TabItem.Parent as MetroTabControl;
+            internal MetroTabControl? TabControl => TabItem.Parent as MetroTabControl;
 
-            private MetroTabItem TabItem { get; }
+            internal MetroTabItem TabItem { get; }
 
             public string? Title
             {
@@ -358,18 +358,18 @@ namespace Minimal.Mvvm.Windows
             }
 
             e.Cancel = true;
-            tabControl.Dispatcher.InvokeAsync(async () => await CloseThisTabItemAsync(tabControl, e.ClosingTabItem, document.CancellationTokenSource.Token));
+            tabControl.Dispatcher.InvokeAsync(async () => await CloseThisTabItemAsync(document, document.CancellationTokenSource.Token));
         }
 
         #endregion
 
         #region Methods
 
-        private static async ValueTask CloseThisTabItemAsync(BaseMetroTabControl tabControl, MetroTabItem tabItem, CancellationToken cancellationToken)
+        private static async ValueTask CloseThisTabItemAsync(TabbedDocument document, CancellationToken cancellationToken)
         {
             try
             {
-                var viewModel = ViewModelHelper.GetViewModelFromView(tabItem.Content);
+                var viewModel = ViewModelHelper.GetViewModelFromView(document.TabItem.Content);
                 Debug.Assert(viewModel is IAsyncDocumentContent);
                 if (viewModel is IAsyncDocumentContent documentContent && await documentContent.CanCloseAsync(cancellationToken) == false)
                 {
@@ -382,17 +382,13 @@ namespace Minimal.Mvvm.Windows
                 //do nothing
             }
 
-            var document = GetDocument(tabItem);
-            if (document?.HideInsteadOfClose == true)
+            if (document.HideInsteadOfClose)
             {
                 document.Hide();
                 return;
             }
 
-            // if the list is hard-coded (i.e. has no ItemsSource)
-            // then we remove the item from the collection
-            tabItem.ClearStyle();
-            tabControl.Items.Remove(tabItem);
+            await document.CloseAsync(force: true).ConfigureAwait(false);
         }
 
         public async ValueTask<IAsyncDocument> CreateDocumentAsync(string? documentType, object? viewModel, object? parentViewModel, object? parameter, CancellationToken cancellationToken = default)
