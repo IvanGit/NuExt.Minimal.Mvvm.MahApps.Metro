@@ -36,6 +36,7 @@ namespace MovieWpfApp
             _lifetime.Add(_cts.Cancel);
             ServiceContainer = new ServiceProvider(this);
             TaskScheduler.UnobservedTaskException += TaskScheduler_UnobservedTaskException;
+            Dispatcher.UnhandledException += Dispatcher_UnhandledException;
         }
 
         #region Properties
@@ -172,7 +173,7 @@ namespace MovieWpfApp
             try
             {
                 var window = new MainWindow { DataContext = viewModel };
-                await viewModel.InitializeAsync(viewModel.CancellationTokenSource.Token);
+                await viewModel.InitializeAsync(viewModel.CancellationToken);
                 window.Show();
             }
             catch (Exception ex)
@@ -186,6 +187,16 @@ namespace MovieWpfApp
 
             _ = Task.Run(() => WaitForNotifyAsync(_cts.Token), _cts.Token);
             _ = Task.Run(() => PerformanceMonitor.RunAsync(_cts.Token), _cts.Token);
+        }
+
+        private void Dispatcher_UnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
+        {
+            var logger = GetService<ILogger>();
+            if (logger?.IsEnabled(LogLevel.Error) == true)
+            {
+                logger.LogError(e.Exception, "Dispatcher Unhandled Exception: {Exception}.", e.Exception.Message);
+            }
+            e.Handled = true;
         }
 
         private void TaskScheduler_UnobservedTaskException(object? sender, UnobservedTaskExceptionEventArgs e)
@@ -286,7 +297,7 @@ namespace MovieWpfApp
             {
                 while (await awaiter.WaitOneAsync(cancellationToken))//_ewh is set
                 {
-                    await this.InvokeAsync(() =>
+                    await Dispatcher.InvokeAsync(() =>
                     {
                         if (cancellationToken.IsCancellationRequested)
                         {

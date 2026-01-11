@@ -45,7 +45,7 @@
                                  DirectoryName="{Binding EnvironmentService.SettingsDirectory, FallbackValue={x:Null}}"/>
         <minimal:WindowedDocumentService x:Name="Windows" 
                                          ActiveDocument="{Binding ActiveWindow}"
-                                         UnresolvedViewType="{x:Type views:ErrorView}">
+                                         FallbackViewType="{x:Type views:ErrorView}">
             <minimal:WindowedDocumentService.WindowStyle>
                 <Style TargetType="{x:Type mah:MetroWindow}">
                     <Setter Property="minimal:Interaction.BehaviorsTemplate">
@@ -88,7 +88,7 @@
             <minimal:Interaction.Behaviors>
                 <minimal:MetroTabbedDocumentService x:Name="Documents" CloseButtonEnabled="True"
                                                     ActiveDocument="{Binding ActiveDocument}"
-                                                    UnresolvedViewType="{x:Type views:ErrorView}">
+                                                    FallbackViewType="{x:Type views:ErrorView}">
                     <minimal:Interaction.Behaviors>
                         <minimal:EventTrigger EventName="ActiveDocumentChanged" Command="{Binding ActiveDocumentChangedCommand}"/>
                     </minimal:Interaction.Behaviors>

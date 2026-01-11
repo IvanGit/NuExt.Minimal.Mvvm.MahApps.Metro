@@ -22,11 +22,11 @@ namespace MovieWpfApp.ViewModels
 
         #region Methods
 
-        protected override Task OnInitializeAsync(CancellationToken cancellationToken)
+        protected override Task InitializeAsyncCore(CancellationToken cancellationToken)
         {
             Debug.Assert(Movie != null, $"{nameof(Movie)} is null");
             Debug.Assert(MoviesService != null, $"{nameof(MoviesService)} is null");
-            return base.OnInitializeAsync(cancellationToken);
+            return base.InitializeAsyncCore(cancellationToken);
         }
 
         #endregion

@@ -65,10 +65,10 @@ namespace MovieWpfApp.ViewModels
             return await base.CanCloseAsync(cancellationToken).ConfigureAwait(false);
         }
 
-        protected override async Task OnInitializeAsync(CancellationToken cancellationToken)
+        protected override async Task InitializeAsyncCore(CancellationToken cancellationToken)
         {
             Debug.Assert(Parameter is MovieModel);
-            await base.OnInitializeAsync(cancellationToken);
+            await base.InitializeAsyncCore(cancellationToken);
             Lifetime.AddBracket(() => Movie.PropertyChanged += Movie_PropertyChanged,
                 () => Movie.PropertyChanged -= Movie_PropertyChanged);
             UpdateTitle();

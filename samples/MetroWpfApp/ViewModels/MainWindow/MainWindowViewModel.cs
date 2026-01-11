@@ -190,12 +190,12 @@ namespace MovieWpfApp.ViewModels
             return default;
         }
 
-        protected override async ValueTask OnDisposeAsync()
+        protected override async ValueTask DisposeAsyncCore()
         {
             var doc = DocumentManagerService?.FindDocumentById(default(Movies));
             Settings!.MoviesOpened = doc is not null;
 
-            await base.OnDisposeAsync();
+            await base.DisposeAsyncCore().ConfigureAwait(false);
         }
 
         protected override async void OnError(Exception ex, [CallerMemberName] string? callerName = null)
@@ -225,13 +225,13 @@ namespace MovieWpfApp.ViewModels
                 var dialogSettings = new MetroDialogSettings
                 {
                     AffirmativeButtonText = Loc.OK,
-                    CancellationToken = CancellationTokenSource.Token,
+                    CancellationToken = CancellationToken,
                 };
                 await DialogCoordinator.ShowMessageAsync(this, Loc.Error, string.Format(Loc.An_error_has_occurred_in_Arg0_Arg1, callerName, ex.Message), MessageDialogStyle.Affirmative, dialogSettings).ConfigureAwait(false);
             }
         }
 
-        protected override Task OnInitializeAsync(CancellationToken cancellationToken)
+        protected override Task InitializeAsyncCore(CancellationToken cancellationToken)
         {
             Debug.Assert(DialogCoordinator != null, $"{nameof(DialogCoordinator)} is null");
             Debug.Assert(DocumentManagerService != null, $"{nameof(DocumentManagerService)} is null");
@@ -263,7 +263,7 @@ namespace MovieWpfApp.ViewModels
                     () => notifyPropertyChanged1.PropertyChanged -= WindowManagerService_PropertyChanged);
             }
 
-            return base.OnInitializeAsync(cancellationToken);
+            return base.InitializeAsyncCore(cancellationToken);
         }
 
         private void UpdateTitle()
